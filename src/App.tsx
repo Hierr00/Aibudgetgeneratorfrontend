@@ -8,6 +8,10 @@ import imgAvatar from "figma:asset/a8b52980fc79bf5bb2d45096d4fcb29741a9a7f1.png"
 import imgLogo from "figma:asset/a8b52980fc79bf5bb2d45096d4fcb29741a9a7f1.png";
 import imgHolded from "figma:asset/7401d766ff14f077069e810c6eb9b53a09ed3cbd.png";
 import imgTutorial from "figma:asset/dd28a05c82316a5c0befc78ffe4ce0c583c45d2b.png";
+import { Input } from "./components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui/select";
+import { Button } from "./components/ui/button";
+import { Trash2, Plus } from "lucide-react";
 
 interface Budget {
   id: string;
@@ -29,6 +33,24 @@ interface Message {
   role: "user" | "assistant";
   content: string;
   timestamp: Date;
+}
+
+interface BudgetItem {
+  id: string;
+  concept: string;
+  description: string;
+  pricePerUnit: number;
+  quantity: number;
+  ivaRate: number; // 21, 10, 4, 0 (exenta)
+}
+
+interface BudgetData {
+  budgetNumber: string;
+  clientName: string;
+  clientLocation: string;
+  date: string;
+  dueDate: string;
+  items: BudgetItem[];
 }
 
 const templates: Template[] = [
@@ -481,9 +503,55 @@ export default function App() {
   const [isTyping, setIsTyping] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
+  // Budget data state
+  const [budgetData, setBudgetData] = useState<Record<string, BudgetData>>({
+    "001": {
+      budgetNumber: "001",
+      clientName: "Clientes varios",
+      clientLocation: "España",
+      date: "03/11/2025",
+      dueDate: "18/11/2025",
+      items: [
+        {
+          id: "1",
+          concept: "Servicio Corte Láser",
+          description: "Precio €/min de corte",
+          pricePerUnit: 0.66,
+          quantity: 37.44,
+          ivaRate: 21,
+        },
+        {
+          id: "2",
+          concept: "Tablero DM · 100x80cm",
+          description: "Grosor · 3mm",
+          pricePerUnit: 9.17,
+          quantity: 1,
+          ivaRate: 21,
+        },
+      ],
+    },
+    "002": {
+      budgetNumber: "002",
+      clientName: "Cliente Ejemplo",
+      clientLocation: "España",
+      date: new Date().toLocaleDateString('es-ES'),
+      dueDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toLocaleDateString('es-ES'),
+      items: [],
+    },
+    "003": {
+      budgetNumber: "003",
+      clientName: "Cliente Ejemplo",
+      clientLocation: "España",
+      date: new Date().toLocaleDateString('es-ES'),
+      dueDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toLocaleDateString('es-ES'),
+      items: [],
+    },
+  });
+
   const currentTemplate = templates[templateIndex];
   const currentChat = chatHistory[selectedBudget] || [];
   const hasMessages = currentChat.length > 0;
+  const currentBudgetData = budgetData[selectedBudget];
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -502,6 +570,17 @@ export default function App() {
     setChatHistory(prev => ({
       ...prev,
       [newId]: []
+    }));
+    setBudgetData(prev => ({
+      ...prev,
+      [newId]: {
+        budgetNumber: newId,
+        clientName: "Cliente Ejemplo",
+        clientLocation: "España",
+        date: new Date().toLocaleDateString('es-ES'),
+        dueDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toLocaleDateString('es-ES'),
+        items: [],
+      }
     }));
     setSelectedBudget(newId);
   };
@@ -571,6 +650,83 @@ export default function App() {
       e.preventDefault();
       handleSendMessage();
     }
+  };
+
+  // Budget calculation helpers
+  const calculateSubtotal = (item: BudgetItem) => {
+    return item.pricePerUnit * item.quantity;
+  };
+
+  const calculateIVA = (item: BudgetItem) => {
+    const subtotal = calculateSubtotal(item);
+    return subtotal * (item.ivaRate / 100);
+  };
+
+  const calculateItemTotal = (item: BudgetItem) => {
+    return calculateSubtotal(item) + calculateIVA(item);
+  };
+
+  const calculateBaseImponible = () => {
+    return currentBudgetData.items.reduce((sum, item) => sum + calculateSubtotal(item), 0);
+  };
+
+  const calculateTotalIVA = () => {
+    return currentBudgetData.items.reduce((sum, item) => sum + calculateIVA(item), 0);
+  };
+
+  const calculateTotal = () => {
+    return calculateBaseImponible() + calculateTotalIVA();
+  };
+
+  // Budget editing functions
+  const updateBudgetField = (field: keyof BudgetData, value: string) => {
+    setBudgetData(prev => ({
+      ...prev,
+      [selectedBudget]: {
+        ...prev[selectedBudget],
+        [field]: value,
+      },
+    }));
+  };
+
+  const updateBudgetItem = (itemId: string, field: keyof BudgetItem, value: string | number) => {
+    setBudgetData(prev => ({
+      ...prev,
+      [selectedBudget]: {
+        ...prev[selectedBudget],
+        items: prev[selectedBudget].items.map(item =>
+          item.id === itemId ? { ...item, [field]: value } : item
+        ),
+      },
+    }));
+  };
+
+  const addBudgetItem = () => {
+    const newItem: BudgetItem = {
+      id: Date.now().toString(),
+      concept: "",
+      description: "",
+      pricePerUnit: 0,
+      quantity: 1,
+      ivaRate: 21,
+    };
+    setBudgetData(prev => ({
+      ...prev,
+      [selectedBudget]: {
+        ...prev[selectedBudget],
+        items: [...prev[selectedBudget].items, newItem],
+      },
+    }));
+  };
+
+  const removeBudgetItem = (itemId: string) => {
+    setBudgetData(prev => ({
+      ...prev,
+      [selectedBudget]: {
+        ...prev[selectedBudget],
+        items: prev[selectedBudget].items.filter(item => item.id !== itemId),
+      },
+    }));
   };
 
   return (
@@ -805,7 +961,9 @@ export default function App() {
 
         {/* PDF Content */}
         <div className="basis-0 grow min-h-px min-w-px relative shrink-0 w-full overflow-y-auto">
-          <div className="bg-white box-border content-stretch flex flex-col gap-[20px] h-[842px] items-start p-[40px] relative shrink-0">
+          {viewMode === "preview" ? (
+            /* Preview Mode - PDF */
+            <div className="bg-white box-border content-stretch flex flex-col gap-[20px] h-[842px] items-start p-[40px] relative shrink-0">
             {/* Logo and Company Info */}
             <div className="content-stretch flex items-center justify-between relative shrink-0 w-[553px]">
               <div className="flex flex-row items-center self-stretch">
@@ -834,18 +992,18 @@ export default function App() {
             {/* Budget Header */}
             <div className="content-stretch flex flex-col gap-[35px] items-start relative shrink-0 w-[553px]">
               <div className="content-stretch flex items-start justify-between relative shrink-0 w-full">
-                <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[14px] text-neutral-950 text-nowrap whitespace-pre">Presupuesto · 001</p>
+                <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[14px] text-neutral-950 text-nowrap whitespace-pre">Presupuesto · {currentBudgetData.budgetNumber}</p>
                 <div className="content-stretch flex flex-col font-['Geist:Regular',sans-serif] gap-[2px] items-end leading-[11px] not-italic relative shrink-0 text-[11px] text-neutral-500 text-right w-[193px]">
-                  <p className="relative shrink-0 w-full">Fecha: 03/11/2025</p>
-                  <p className="relative shrink-0 w-full">Vencimiento: 18/11/2025</p>
+                  <p className="relative shrink-0 w-full">Fecha: {currentBudgetData.date}</p>
+                  <p className="relative shrink-0 w-full">Vencimiento: {currentBudgetData.dueDate}</p>
                 </div>
               </div>
               <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between not-italic relative shrink-0 w-full">
                 <div className="content-stretch flex flex-col gap-[2px] items-start relative shrink-0 w-[81px]">
-                  <p className="leading-[12px] relative shrink-0 text-[12px] text-neutral-950 w-full">Clientes varios</p>
-                  <p className="leading-[11px] relative shrink-0 text-[11px] text-neutral-500 w-full">España</p>
+                  <p className="leading-[12px] relative shrink-0 text-[12px] text-neutral-950 w-full">{currentBudgetData.clientName}</p>
+                  <p className="leading-[11px] relative shrink-0 text-[11px] text-neutral-500 w-full">{currentBudgetData.clientLocation}</p>
                 </div>
-                <p className="leading-[16px] relative shrink-0 text-[20px] text-neutral-950 text-nowrap whitespace-pre">Total 41,05€</p>
+                <p className="leading-[16px] relative shrink-0 text-[20px] text-neutral-950 text-nowrap whitespace-pre">Total {calculateTotal().toFixed(2)}€</p>
               </div>
             </div>
 
@@ -872,54 +1030,247 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Item 1 */}
-                <div className="content-stretch flex items-start justify-between relative shrink-0 w-full">
-                  <div className="content-stretch flex flex-col font-['Geist:Regular',sans-serif] gap-[2px] items-start not-italic relative shrink-0 text-nowrap w-[81px] whitespace-pre">
-                    <p className="leading-[12px] relative shrink-0 text-[12px] text-neutral-950">Servicio Corte Láser</p>
-                    <p className="leading-[11px] relative shrink-0 text-[11px] text-neutral-500">Precio €/min de corte</p>
+                {/* Items */}
+                {currentBudgetData.items.map((item) => (
+                  <div key={item.id} className="content-stretch flex items-start justify-between relative shrink-0 w-full">
+                    <div className="content-stretch flex flex-col font-['Geist:Regular',sans-serif] gap-[2px] items-start not-italic relative shrink-0 text-nowrap w-[81px] whitespace-pre">
+                      <p className="leading-[12px] relative shrink-0 text-[12px] text-neutral-950">{item.concept}</p>
+                      <p className="leading-[11px] relative shrink-0 text-[11px] text-neutral-500">{item.description}</p>
+                    </div>
+                    <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between leading-[11px] not-italic relative shrink-0 text-[11px] text-neutral-500 w-[345px]">
+                      <p className="relative shrink-0 text-right w-[41px]">{item.pricePerUnit.toFixed(2)}€</p>
+                      <p className="relative shrink-0 text-right w-[60px]">{item.quantity}</p>
+                      <p className="relative shrink-0 text-right w-[55px]">{calculateSubtotal(item).toFixed(2)}€</p>
+                      <p className="relative shrink-0 w-[20px]">{item.ivaRate}%</p>
+                      <p className="relative shrink-0 text-nowrap text-right whitespace-pre">{calculateItemTotal(item).toFixed(2)}€</p>
+                    </div>
                   </div>
-                  <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between leading-[11px] not-italic relative shrink-0 text-[11px] text-neutral-500 w-[345px]">
-                    <p className="relative shrink-0 text-right w-[41px]">0,66€</p>
-                    <p className="relative shrink-0 text-right w-[60px]">37,44</p>
-                    <p className="relative shrink-0 text-right w-[55px]">24,75€</p>
-                    <p className="relative shrink-0 w-[20px]">21%</p>
-                    <p className="relative shrink-0 text-nowrap text-right whitespace-pre">29,95€</p>
-                  </div>
-                </div>
-
-                {/* Item 2 */}
-                <div className="content-stretch flex items-start justify-between relative shrink-0 w-full">
-                  <div className="content-stretch flex flex-col font-['Geist:Regular',sans-serif] gap-[2px] items-start not-italic relative shrink-0 text-nowrap whitespace-pre">
-                    <p className="leading-[12px] relative shrink-0 text-[12px] text-neutral-950">Tablero DM · 100x80cm</p>
-                    <p className="leading-[11px] relative shrink-0 text-[11px] text-neutral-500">Grosor · 3mm</p>
-                  </div>
-                  <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between leading-[11px] not-italic relative shrink-0 text-[11px] text-neutral-500 w-[345px]">
-                    <p className="relative shrink-0 text-right w-[41px]">9,17€</p>
-                    <p className="relative shrink-0 text-right w-[60px]">1</p>
-                    <p className="relative shrink-0 text-right w-[55px]">9,17€</p>
-                    <p className="relative shrink-0 w-[20px]">21%</p>
-                    <p className="relative shrink-0 text-nowrap text-right whitespace-pre">11,10€</p>
-                  </div>
-                </div>
+                ))}
               </div>
 
               {/* Totals */}
               <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[175px]">
                 <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between leading-[16px] not-italic relative shrink-0 text-center text-neutral-950 text-nowrap w-full whitespace-pre">
                   <p className="relative shrink-0 text-[14px]">Base Imponible</p>
-                  <p className="relative shrink-0 text-[11px]">33,92€</p>
+                  <p className="relative shrink-0 text-[11px]">{calculateBaseImponible().toFixed(2)}€</p>
                 </div>
                 <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between leading-[16px] not-italic relative shrink-0 text-neutral-950 w-full">
-                  <p className="relative shrink-0 text-[14px] text-right w-[99px]">Iva 21%</p>
-                  <p className="relative shrink-0 text-[11px] text-center text-nowrap whitespace-pre">7,13€</p>
+                  <p className="relative shrink-0 text-[14px] text-right w-[99px]">Iva</p>
+                  <p className="relative shrink-0 text-[11px] text-center text-nowrap whitespace-pre">{calculateTotalIVA().toFixed(2)}€</p>
                 </div>
                 <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between leading-[16px] not-italic relative shrink-0 text-neutral-950 w-full">
                   <p className="relative shrink-0 text-[14px] text-right w-[99px]">Total</p>
-                  <p className="relative shrink-0 text-[11px] text-center text-nowrap whitespace-pre">41,05€</p>
+                  <p className="relative shrink-0 text-[11px] text-center text-nowrap whitespace-pre">{calculateTotal().toFixed(2)}€</p>
                 </div>
               </div>
             </div>
           </div>
+          ) : (
+            /* Edit Mode - Form */
+            <div className="bg-white box-border content-stretch flex flex-col gap-[20px] items-start p-[40px] relative shrink-0 overflow-y-auto">
+              {/* Logo and Company Info - Static */}
+              <div className="content-stretch flex items-center justify-between relative shrink-0 w-full max-w-[553px]">
+                <div className="flex flex-row items-center self-stretch">
+                  <div className="aspect-[800/800] h-full relative shrink-0" data-name="[LIGHT MODE] ARKCUTT LOGO 2">
+                    <img alt="" className="absolute inset-0 max-w-none object-50%-50% object-cover pointer-events-none size-full" src={imgLogo} />
+                  </div>
+                </div>
+                <div className="content-stretch flex flex-col font-['Geist:Regular',sans-serif] items-end not-italic relative shrink-0 text-[11px] text-neutral-500 text-right">
+                  <p className="leading-[11px] relative shrink-0 text-nowrap whitespace-pre">Asociación Junior Empresa MAKOSITE</p>
+                  <p className="leading-[11px] relative shrink-0 text-nowrap whitespace-pre">G72660145</p>
+                  <div className="leading-[11px] relative shrink-0 w-[193px]">
+                    <p className="mb-0">Carrer Ciutat d'Asunción, 16</p>
+                    <p>Barcelona (08030), Barcelona, España</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="h-0 relative shrink-0 w-full max-w-[553px]">
+                <div className="absolute bottom-0 left-0 right-0 top-[-1px]" style={{ "--stroke-0": "rgba(229, 229, 229, 1)" } as React.CSSProperties}>
+                  <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 553 1">
+                    <line id="Line 96" stroke="var(--stroke-0, #E5E5E5)" x2="553" y1="0.5" y2="0.5" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Budget Header - Editable */}
+              <div className="content-stretch flex flex-col gap-[25px] items-start relative shrink-0 w-full max-w-[553px]">
+                <div className="content-stretch flex items-start justify-between gap-[20px] relative shrink-0 w-full">
+                  <div className="flex flex-col gap-[8px] w-[200px]">
+                    <label className="font-['Geist:Regular',sans-serif] text-[12px] text-neutral-500">Número Presupuesto</label>
+                    <Input 
+                      value={currentBudgetData.budgetNumber}
+                      onChange={(e) => updateBudgetField("budgetNumber", e.target.value)}
+                      className="h-[32px] text-[14px]"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-[8px] flex-1">
+                    <label className="font-['Geist:Regular',sans-serif] text-[12px] text-neutral-500">Fecha</label>
+                    <Input 
+                      value={currentBudgetData.date}
+                      onChange={(e) => updateBudgetField("date", e.target.value)}
+                      className="h-[32px] text-[14px]"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-[8px] flex-1">
+                    <label className="font-['Geist:Regular',sans-serif] text-[12px] text-neutral-500">Vencimiento</label>
+                    <Input 
+                      value={currentBudgetData.dueDate}
+                      onChange={(e) => updateBudgetField("dueDate", e.target.value)}
+                      className="h-[32px] text-[14px]"
+                    />
+                  </div>
+                </div>
+                <div className="content-stretch flex items-center justify-between gap-[20px] relative shrink-0 w-full">
+                  <div className="flex flex-col gap-[8px] w-[200px]">
+                    <label className="font-['Geist:Regular',sans-serif] text-[12px] text-neutral-500">Cliente</label>
+                    <Input 
+                      value={currentBudgetData.clientName}
+                      onChange={(e) => updateBudgetField("clientName", e.target.value)}
+                      className="h-[32px] text-[14px]"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-[8px] flex-1">
+                    <label className="font-['Geist:Regular',sans-serif] text-[12px] text-neutral-500">Ubicación</label>
+                    <Input 
+                      value={currentBudgetData.clientLocation}
+                      onChange={(e) => updateBudgetField("clientLocation", e.target.value)}
+                      className="h-[32px] text-[14px]"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="h-0 relative shrink-0 w-full max-w-[553px]">
+                <div className="absolute bottom-0 left-0 right-0 top-[-1px]" style={{ "--stroke-0": "rgba(229, 229, 229, 1)" } as React.CSSProperties}>
+                  <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 553 1">
+                    <line id="Line 96" stroke="var(--stroke-0, #E5E5E5)" x2="553" y1="0.5" y2="0.5" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Budget Items - Editable */}
+              <div className="content-stretch flex flex-col gap-[12px] items-start relative shrink-0 w-full max-w-[553px]">
+                <div className="flex items-center justify-between w-full">
+                  <p className="font-['Geist:Regular',sans-serif] text-[14px] text-neutral-950">Conceptos</p>
+                  <Button
+                    onClick={addBudgetItem}
+                    size="sm"
+                    variant="outline"
+                    className="h-[28px] gap-[4px]"
+                  >
+                    <Plus className="w-[14px] h-[14px]" />
+                    Añadir concepto
+                  </Button>
+                </div>
+
+                {currentBudgetData.items.map((item) => (
+                  <div key={item.id} className="bg-neutral-50 border border-neutral-200 rounded-[8px] p-[16px] w-full">
+                    <div className="flex flex-col gap-[12px]">
+                      <div className="flex gap-[12px] items-start">
+                        <div className="flex flex-col gap-[8px] flex-1">
+                          <label className="font-['Geist:Regular',sans-serif] text-[11px] text-neutral-500">Concepto</label>
+                          <Input 
+                            value={item.concept}
+                            onChange={(e) => updateBudgetItem(item.id, "concept", e.target.value)}
+                            className="h-[32px] text-[12px]"
+                            placeholder="Ej: Servicio Corte Láser"
+                          />
+                        </div>
+                        <Button
+                          onClick={() => removeBudgetItem(item.id)}
+                          size="sm"
+                          variant="ghost"
+                          className="h-[32px] w-[32px] p-0 mt-[20px]"
+                        >
+                          <Trash2 className="w-[14px] h-[14px] text-red-500" />
+                        </Button>
+                      </div>
+
+                      <div className="flex flex-col gap-[8px]">
+                        <label className="font-['Geist:Regular',sans-serif] text-[11px] text-neutral-500">Descripción</label>
+                        <Input 
+                          value={item.description}
+                          onChange={(e) => updateBudgetItem(item.id, "description", e.target.value)}
+                          className="h-[32px] text-[12px]"
+                          placeholder="Ej: Precio €/min de corte"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-4 gap-[12px]">
+                        <div className="flex flex-col gap-[8px]">
+                          <label className="font-['Geist:Regular',sans-serif] text-[11px] text-neutral-500">Precio/u</label>
+                          <Input 
+                            type="number"
+                            step="0.01"
+                            value={item.pricePerUnit}
+                            onChange={(e) => updateBudgetItem(item.id, "pricePerUnit", parseFloat(e.target.value) || 0)}
+                            className="h-[32px] text-[12px]"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-[8px]">
+                          <label className="font-['Geist:Regular',sans-serif] text-[11px] text-neutral-500">Unidades</label>
+                          <Input 
+                            type="number"
+                            step="0.01"
+                            value={item.quantity}
+                            onChange={(e) => updateBudgetItem(item.id, "quantity", parseFloat(e.target.value) || 0)}
+                            className="h-[32px] text-[12px]"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-[8px]">
+                          <label className="font-['Geist:Regular',sans-serif] text-[11px] text-neutral-500">IVA</label>
+                          <Select 
+                            value={item.ivaRate.toString()}
+                            onValueChange={(value) => updateBudgetItem(item.id, "ivaRate", parseInt(value))}
+                          >
+                            <SelectTrigger className="h-[32px] text-[12px]">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="21">21%</SelectItem>
+                              <SelectItem value="10">10%</SelectItem>
+                              <SelectItem value="4">4%</SelectItem>
+                              <SelectItem value="0">Exenta</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="flex flex-col gap-[8px]">
+                          <label className="font-['Geist:Regular',sans-serif] text-[11px] text-neutral-500">Subtotal</label>
+                          <div className="h-[32px] flex items-center px-[12px] bg-neutral-100 rounded-[6px] border border-neutral-200">
+                            <p className="font-['Geist:Regular',sans-serif] text-[12px] text-neutral-950">{calculateSubtotal(item).toFixed(2)}€</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex justify-end gap-[12px]">
+                        <div className="flex flex-col gap-[4px]">
+                          <p className="font-['Geist:Regular',sans-serif] text-[11px] text-neutral-500">IVA: {calculateIVA(item).toFixed(2)}€</p>
+                          <p className="font-['Geist:Regular',sans-serif] text-[12px] text-neutral-950">Total: {calculateItemTotal(item).toFixed(2)}€</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {/* Totals Display */}
+                <div className="flex flex-col gap-[12px] items-end w-full mt-[20px] p-[16px] bg-neutral-50 rounded-[8px] border border-neutral-200">
+                  <div className="flex justify-between w-[250px]">
+                    <p className="font-['Geist:Regular',sans-serif] text-[14px] text-neutral-950">Base Imponible</p>
+                    <p className="font-['Geist:Regular',sans-serif] text-[14px] text-neutral-950">{calculateBaseImponible().toFixed(2)}€</p>
+                  </div>
+                  <div className="flex justify-between w-[250px]">
+                    <p className="font-['Geist:Regular',sans-serif] text-[14px] text-neutral-950">IVA Total</p>
+                    <p className="font-['Geist:Regular',sans-serif] text-[14px] text-neutral-950">{calculateTotalIVA().toFixed(2)}€</p>
+                  </div>
+                  <div className="flex justify-between w-[250px] pt-[8px] border-t border-neutral-200">
+                    <p className="font-['Geist:Medium',sans-serif] text-[16px] text-neutral-950">Total</p>
+                    <p className="font-['Geist:Medium',sans-serif] text-[16px] text-neutral-950">{calculateTotal().toFixed(2)}€</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
