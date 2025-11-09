@@ -4,14 +4,18 @@ import svgPathsChat from "./imports/svg-cgoxqakjl5";
 import svgPathsPDF from "./imports/svg-pl0s22qjao";
 import svgPathsSidebar from "./imports/svg-telcpgtqu7";
 import svgPathsTemplates from "./imports/svg-dmergg9k2x";
+import svgPathsEdit from "./imports/svg-7seo6s6u5f";
+import svgPathsMinimized from "./imports/svg-94od4mt7e9";
+import svgPathsTutorial from "./imports/svg-359etij165";
 import imgAvatar from "figma:asset/a8b52980fc79bf5bb2d45096d4fcb29741a9a7f1.png";
 import imgLogo from "figma:asset/a8b52980fc79bf5bb2d45096d4fcb29741a9a7f1.png";
-import imgHolded from "figma:asset/7401d766ff14f077069e810c6eb9b53a09ed3cbd.png";
+import imgHolded from "./imports/svg-pl0s22qjao";
 import imgTutorial from "figma:asset/dd28a05c82316a5c0befc78ffe4ce0c583c45d2b.png";
+import imgTutorialView from "figma:asset/2c2d70a267e57c00aac36ee8716b0929d4c86dda.png";
 import { Input } from "./components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./components/ui/select";
-import { Button } from "./components/ui/button";
-import { Trash2, Plus } from "lucide-react";
+import { Button as ShadButton } from "./components/ui/button";
+import { Trash2, Plus, ChevronLeft, ChevronRight, FileText, Info, Share2, Heart, MoreHorizontal, X } from "lucide-react";
 
 interface Budget {
   id: string;
@@ -118,42 +122,6 @@ const getAIResponse = (userMessage: string): string => {
   // Default response
   return "Entiendo tu consulta. Puedo ayudarte con presupuestos para Corte Láser, Impresión 3D y Fresado CNC. \n\nPara crear un presupuesto preciso, necesito algunos detalles sobre tu proyecto:\n\n• ¿Qué tipo de servicio necesitas?\n• ¿Qué material?\n• ¿Cantidad de piezas?\n• ¿Tienes archivos de diseño?\n\n¿Puedes darme más información sobre tu proyecto?";
 };
-
-function Icon() {
-  return (
-    <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-name="icon">
-      <div className="overflow-clip relative shrink-0 size-[16px]" data-name="icon">
-        <div className="absolute inset-[41.67%_12.5%]" data-name="Vector">
-          <div className="absolute inset-0" style={{ "--fill-0": "rgba(115, 115, 115, 1)" } as React.CSSProperties}>
-            <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 12 3">
-              <g id="Vector">
-                <path d={svgPathsSidebar.p18d1efb2} fill="var(--fill-0, #737373)" />
-                <path d={svgPathsSidebar.p2d963500} fill="var(--fill-0, #737373)" />
-                <path d={svgPathsSidebar.p31beb840} fill="var(--fill-0, #737373)" />
-              </g>
-            </svg>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Icon1() {
-  return (
-    <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-name="icon">
-      <div className="overflow-clip relative shrink-0 size-[12px]" data-name="<PlusIcon>">
-        <div className="absolute inset-[16.66%_16.66%_16.67%_16.67%]" data-name="Vector">
-          <div className="absolute inset-0" style={{ "--fill-0": "rgba(115, 115, 115, 1)" } as React.CSSProperties}>
-            <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 8 8">
-              <path d={svgPathsSidebar.p9086fb0} fill="var(--fill-0, #737373)" id="Vector" />
-            </svg>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function UserMessage({ message }: { message: Message }) {
   const [copied, setCopied] = useState(false);
@@ -328,41 +296,13 @@ function AssistantMessage({ message }: { message: Message }) {
             </div>
           </button>
           <button className="bg-[rgba(255,255,255,0)] box-border content-stretch flex gap-[6px] items-center justify-center min-w-[32px] overflow-clip p-[6px] relative rounded-[8px] shrink-0 size-[32px] hover:bg-neutral-100 transition-colors">
-            <div className="overflow-clip relative shrink-0 size-[16px]">
-              <div className="absolute inset-[4.16%_12.5%_4.17%_12.5%]">
-                <div className="absolute inset-0" style={{ "--fill-0": "rgba(115, 115, 115, 1)" } as React.CSSProperties}>
-                  <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 12 15">
-                    <path d={svgPathsChat.p394b7e00} fill="var(--fill-0, #737373)" />
-                  </svg>
-                </div>
-              </div>
-            </div>
+            <Share2 className="w-[16px] h-[16px] text-neutral-500" />
           </button>
           <button className="bg-[rgba(255,255,255,0)] box-border content-stretch flex gap-[6px] items-center justify-center min-w-[32px] overflow-clip p-[6px] relative rounded-[8px] shrink-0 size-[32px] hover:bg-neutral-100 transition-colors">
-            <div className="overflow-clip relative shrink-0 size-[16px]">
-              <div className="absolute inset-[12.44%_4.17%_8.33%_4.16%]">
-                <div className="absolute inset-0" style={{ "--fill-0": "rgba(115, 115, 115, 1)" } as React.CSSProperties}>
-                  <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 15 13">
-                    <path d={svgPathsChat.p2ae0bd00} fill="var(--fill-0, #737373)" />
-                  </svg>
-                </div>
-              </div>
-            </div>
+            <Heart className="w-[16px] h-[16px] text-neutral-500" />
           </button>
           <button className="bg-[rgba(255,255,255,0)] box-border content-stretch flex gap-[6px] items-center justify-center min-w-[32px] overflow-clip p-[6px] relative rounded-[8px] shrink-0 size-[32px] hover:bg-neutral-100 transition-colors">
-            <div className="overflow-clip relative shrink-0 size-[16px]">
-              <div className="absolute inset-[41.67%_12.5%]">
-                <div className="absolute inset-0" style={{ "--fill-0": "rgba(115, 115, 115, 1)" } as React.CSSProperties}>
-                  <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 12 3">
-                    <g>
-                      <path d={svgPathsSidebar.p18d1efb2} fill="var(--fill-0, #737373)" />
-                      <path d={svgPathsSidebar.p2d963500} fill="var(--fill-0, #737373)" />
-                      <path d={svgPathsSidebar.p31beb840} fill="var(--fill-0, #737373)" />
-                    </g>
-                  </svg>
-                </div>
-              </div>
-            </div>
+            <MoreHorizontal className="w-[16px] h-[16px] text-neutral-500" />
           </button>
         </div>
       </div>
@@ -483,6 +423,68 @@ function TemplateSuggestion({ template, index, onSelect }: { template: Template;
   );
 }
 
+// Tutorial Modal Component
+function TutorialModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" onClick={onClose} />
+      
+      {/* Modal */}
+      <div className="relative bg-white rounded-[10px] w-[600px] max-h-[80vh] overflow-hidden border border-neutral-200 shadow-lg">
+        {/* Navigation Bar */}
+        <div className="border-b border-neutral-200 p-[8px]">
+          <div className="flex items-center gap-[8px]">
+            <button className="p-[6px] hover:bg-neutral-100 rounded-[8px] transition-colors">
+              <ChevronLeft className="w-[16px] h-[16px] text-neutral-950" />
+            </button>
+            <button className="p-[6px] hover:bg-neutral-100 rounded-[8px] transition-colors">
+              <svg className="w-[16px] h-[16px]" fill="none" viewBox="0 0 16 16">
+                <path d={svgPathsTutorial.pc4e9e80} fill="currentColor" />
+              </svg>
+            </button>
+            <div className="flex-1 bg-white rounded-[8px] border border-neutral-200 px-[13px] py-[5px]">
+              <p className="font-['Geist:Regular',sans-serif] text-[14px] text-neutral-950">/ Send it to your custom ERP</p>
+            </div>
+            <button className="p-[6px] hover:bg-neutral-100 rounded-[8px] transition-colors">
+              <svg className="w-[16px] h-[16px]" fill="none" viewBox="0 0 16 16">
+                <path d={svgPathsTutorial.p31497e00} fill="currentColor" />
+              </svg>
+            </button>
+            <button className="p-[6px] hover:bg-neutral-100 rounded-[8px] transition-colors">
+              <svg className="w-[16px] h-[16px]" fill="none" viewBox="0 0 16 16">
+                <path d={svgPathsTutorial.p12dcc4b0} fill="currentColor" />
+              </svg>
+            </button>
+            <button onClick={onClose} className="p-[6px] hover:bg-neutral-100 rounded-[8px] transition-colors">
+              <X className="w-[16px] h-[16px] text-neutral-950" />
+            </button>
+          </div>
+        </div>
+
+        {/* Video/Image Content */}
+        <div className="h-[313px] bg-[#d9d9d9] overflow-hidden">
+          <img 
+            src={imgTutorialView} 
+            alt="Tutorial" 
+            className="w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Footer */}
+        <div className="border-t border-neutral-200 bg-[rgba(245,245,245,0.5)] p-[16px]">
+          <button className="w-full flex items-center justify-between hover:bg-neutral-100 transition-colors rounded-[8px] px-[16px] py-[10px]">
+            <p className="font-['Geist:Regular',sans-serif] text-[14px] text-neutral-950">Ver Video</p>
+            <ChevronRight className="w-[16px] h-[16px] rotate-[270deg] text-neutral-950" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [budgets, setBudgets] = useState<Budget[]>([
     { id: "001", name: "Presupuesto · 001" },
@@ -501,6 +503,8 @@ export default function App() {
     "003": [],
   });
   const [isTyping, setIsTyping] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   // Budget data state
@@ -729,185 +733,240 @@ export default function App() {
     }));
   };
 
+  // Calculate sidebar and panel widths
+  const sidebarWidth = sidebarCollapsed ? 50 : 269;
+  const pdfWidth = sidebarCollapsed ? 750 : 691;
+  const chatWidth = sidebarCollapsed ? 530 : 480;
+
   return (
     <div className="bg-[#f3f3f3] content-stretch flex items-start relative size-full" data-name="Desktop - 9">
+      {/* Tutorial Modal */}
+      <TutorialModal isOpen={showTutorial} onClose={() => setShowTutorial(false)} />
+
       {/* Left Sidebar */}
-      <div className="bg-[#f3f3f3] box-border content-stretch flex flex-col h-full items-start p-[20px] relative shrink-0 w-[269px]">
+      <div 
+        className="bg-[#f3f3f3] box-border content-stretch flex flex-col h-full items-start p-[20px] relative shrink-0 transition-all duration-300"
+        style={{ width: `${sidebarWidth}px` }}
+      >
         <div aria-hidden="true" className="absolute border-[0px_1px_0px_0px] border-neutral-200 border-solid inset-0 pointer-events-none" />
         
-        <div className="content-stretch flex flex-col items-start justify-between relative size-full">
-          <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full">
-            {/* Agent Title Section */}
-            <div className="content-stretch flex flex-col gap-[10px] items-start relative shrink-0 w-full">
-              <div className="box-border content-stretch flex items-center justify-between px-0 py-[4px] relative shrink-0 w-full">
-                <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[14px] text-neutral-950 text-nowrap whitespace-pre">Arkcutt's Agent</p>
-                <div className="overflow-clip relative shrink-0 size-[16px]" data-name="<ChevronLeftIcon>">
-                  <div className="absolute inset-[20.83%_33.33%]" data-name="Vector">
-                    <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 6 10">
-                      <path d={svgPathsSidebar.p3d754b00} fill="var(--fill-0, #737373)" id="Vector" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
+        {sidebarCollapsed ? (
+          /* Minimized Sidebar */
+          <div className="content-stretch flex flex-col items-center justify-between relative size-full">
+            <div className="content-stretch flex flex-col gap-[10px] items-center relative shrink-0">
+              {/* Expand button */}
+              <button 
+                onClick={() => setSidebarCollapsed(false)}
+                className="box-border content-stretch flex items-center justify-center px-0 py-[4px] relative shrink-0 hover:bg-neutral-200 rounded transition-colors"
+              >
+                <ChevronRight className="w-[16px] h-[16px] text-neutral-500" />
+              </button>
               
-              {/* New Budget Button */}
-              <div className="bg-white h-[28px] relative rounded-[4px] shrink-0 w-full">
-                <div aria-hidden="true" className="absolute border border-neutral-200 border-solid inset-0 pointer-events-none rounded-[4px]" />
-                <div className="flex flex-row items-center justify-center size-full">
-                  <div className="box-border content-stretch flex gap-[2px] h-[28px] items-center justify-center px-[4px] py-[2px] relative w-full">
-                    <button 
-                      onClick={handleNewBudget}
-                      className="box-border content-stretch flex gap-[8px] h-full items-center justify-center px-[8px] py-0 relative rounded-br-[2px] rounded-tr-[2px] shrink-0 hover:bg-neutral-100 transition-colors cursor-pointer"
-                    >
-                      <Icon1 />
-                      <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[12px] text-neutral-500 text-nowrap whitespace-pre">New Budget</p>
-                    </button>
+              {/* New Budget Icon */}
+              <button 
+                onClick={handleNewBudget}
+                className="bg-white box-border content-stretch flex items-center justify-center p-[6px] relative rounded-[8px] shrink-0 size-[30px] hover:bg-neutral-100 transition-colors border border-neutral-200"
+              >
+                <Plus className="w-[16px] h-[16px] text-neutral-950" />
+              </button>
+
+              {/* Budgets - only show selected */}
+              <button
+                className="box-border content-stretch flex items-center justify-center px-0 py-[4px] relative w-full hover:bg-neutral-200 rounded transition-colors"
+              >
+                <FileText className="w-[16px] h-[16px] text-neutral-950" />
+              </button>
+            </div>
+
+            {/* Info button at bottom */}
+            <button 
+              onClick={() => setShowTutorial(true)}
+              className="bg-white box-border content-stretch flex items-center justify-center p-[6px] relative rounded-[8px] shrink-0 size-[30px] hover:bg-neutral-100 transition-colors border border-neutral-200"
+            >
+              <Info className="w-[16px] h-[16px] text-neutral-950" />
+            </button>
+          </div>
+        ) : (
+          /* Expanded Sidebar */
+          <div className="content-stretch flex flex-col items-start justify-between relative size-full">
+            <div className="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full">
+              {/* Agent Title Section */}
+              <div className="content-stretch flex flex-col gap-[10px] items-start relative shrink-0 w-full">
+                <div className="box-border content-stretch flex items-center justify-between px-0 py-[4px] relative shrink-0 w-full">
+                  <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[14px] text-neutral-950 text-nowrap whitespace-pre">Arkcutt's Agent</p>
+                  <button 
+                    onClick={() => setSidebarCollapsed(true)}
+                    className="overflow-clip relative shrink-0 size-[16px] hover:bg-neutral-200 rounded transition-colors"
+                  >
+                    <ChevronLeft className="w-[16px] h-[16px] text-neutral-500" />
+                  </button>
+                </div>
+                
+                {/* New Budget Button */}
+                <button 
+                  onClick={handleNewBudget}
+                  className="bg-white h-[28px] relative rounded-[4px] shrink-0 w-full hover:bg-neutral-50 transition-colors"
+                >
+                  <div aria-hidden="true" className="absolute border border-neutral-200 border-solid inset-0 pointer-events-none rounded-[4px]" />
+                  <div className="flex flex-row items-center justify-center size-full">
+                    <div className="box-border content-stretch flex gap-[2px] h-[28px] items-center justify-center px-[4px] py-[2px] relative w-full">
+                      <div className="box-border content-stretch flex gap-[8px] h-full items-center justify-center px-[8px] py-0 relative rounded-br-[2px] rounded-tr-[2px] shrink-0">
+                        <Plus className="w-[12px] h-[12px] text-neutral-950" />
+                        <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[12px] text-neutral-500 text-nowrap whitespace-pre">Nuevo Presupuesto</p>
+                      </div>
+                    </div>
                   </div>
+                </button>
+              </div>
+
+              {/* History Section */}
+              <div className="content-stretch flex flex-col gap-[10px] items-start relative shrink-0 w-full">
+                <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[14px] text-neutral-950 text-nowrap whitespace-pre">Historial</p>
+                <div className="content-stretch flex flex-col gap-[5px] items-start relative shrink-0 w-full">
+                  {budgets.map((budget) => (
+                    <button
+                      key={budget.id}
+                      onClick={() => setSelectedBudget(budget.id)}
+                      className={`box-border content-stretch flex items-center justify-between px-0 py-[4px] relative w-full hover:bg-neutral-200 rounded transition-colors cursor-pointer ${
+                        selectedBudget === budget.id ? '' : ''
+                      }`}
+                    >
+                      <div className="content-stretch flex gap-[10px] items-center justify-center relative shrink-0">
+                        {selectedBudget === budget.id && (
+                          <div className="overflow-clip relative shrink-0 size-[16px]" data-name="<MinusIcon>">
+                            <div className="absolute inset-[45.83%_16.67%]" data-name="Vector">
+                              <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 11 2">
+                                <path d={svgPathsSidebar.p871f300} fill="var(--fill-0, #0A0A0A)" id="Vector" />
+                              </svg>
+                            </div>
+                          </div>
+                        )}
+                        <p className={`font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[14px] text-nowrap whitespace-pre ${
+                          selectedBudget === budget.id ? 'text-neutral-950' : 'text-neutral-500'
+                        }`}>
+                          {budget.name}
+                        </p>
+                      </div>
+                      <MoreHorizontal className="w-[16px] h-[16px] text-neutral-500" />
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
 
-            {/* History Section */}
-            <div className="content-stretch flex flex-col gap-[10px] items-start relative shrink-0 w-full">
-              <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[14px] text-neutral-950 text-nowrap whitespace-pre">Historial</p>
-              <div className="content-stretch flex flex-col gap-[5px] items-start relative shrink-0 w-full">
-                {budgets.map((budget) => (
-                  <button
-                    key={budget.id}
-                    onClick={() => setSelectedBudget(budget.id)}
-                    className={`box-border content-stretch flex items-center justify-between px-0 py-[4px] relative w-full hover:bg-neutral-200 rounded transition-colors cursor-pointer ${
-                      selectedBudget === budget.id ? '' : ''
-                    }`}
-                  >
-                    <div className="content-stretch flex gap-[10px] items-center justify-center relative shrink-0">
-                      {selectedBudget === budget.id && (
-                        <div className="overflow-clip relative shrink-0 size-[16px]" data-name="<MinusIcon>">
-                          <div className="absolute inset-[45.83%_16.67%]" data-name="Vector">
-                            <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 11 2">
-                              <path d={svgPathsSidebar.p871f300} fill="var(--fill-0, #0A0A0A)" id="Vector" />
-                            </svg>
+            {/* Tutorial Section at Bottom */}
+            <div className="content-stretch flex flex-col gap-[10px] items-center justify-center relative shrink-0 w-full">
+              <div className="bg-white relative rounded-[10px] shrink-0 w-full" data-name="ContextContent">
+                <div className="box-border content-stretch flex flex-col items-start overflow-clip p-px relative rounded-[inherit] w-full">
+                  <div className="relative shrink-0 w-full" data-name="ContextContentHeader">
+                    <div className="size-full">
+                      <div className="bg-clip-padding border-0 border-[transparent] border-solid box-border content-stretch flex flex-col gap-[8px] items-start p-[12px] relative w-full">
+                        <div className="relative shrink-0 w-full">
+                          <div className="bg-clip-padding border-0 border-[transparent] border-solid box-border content-stretch flex items-center justify-between relative w-full">
+                            <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[12px] text-neutral-950 text-nowrap whitespace-pre">Tutorials</p>
+                            <div className="h-[16px] shrink-0 w-0" />
+                            <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[12px] text-neutral-500 text-nowrap whitespace-pre">Send it to your ERP</p>
                           </div>
                         </div>
-                      )}
-                      <p className={`font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[14px] text-nowrap whitespace-pre ${
-                        selectedBudget === budget.id ? 'text-neutral-950' : 'text-neutral-500'
-                      }`}>
-                        {budget.name}
-                      </p>
-                    </div>
-                    <Icon />
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Tutorial Section at Bottom */}
-          <div className="content-stretch flex flex-col gap-[10px] items-center justify-center relative shrink-0 w-full">
-            <div className="bg-white relative rounded-[10px] shrink-0 w-full" data-name="ContextContent">
-              <div className="box-border content-stretch flex flex-col items-start overflow-clip p-px relative rounded-[inherit] w-full">
-                <div className="relative shrink-0 w-full" data-name="ContextContentHeader">
-                  <div className="size-full">
-                    <div className="bg-clip-padding border-0 border-[transparent] border-solid box-border content-stretch flex flex-col gap-[8px] items-start p-[12px] relative w-full">
-                      <div className="relative shrink-0 w-full">
-                        <div className="bg-clip-padding border-0 border-[transparent] border-solid box-border content-stretch flex items-center justify-between relative w-full">
-                          <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[12px] text-neutral-950 text-nowrap whitespace-pre">Tutorials</p>
-                          <div className="h-[16px] shrink-0 w-0" />
-                          <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[12px] text-neutral-500 text-nowrap whitespace-pre">Send it to your ERP</p>
-                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="h-[139px] relative shrink-0 w-full" data-name="ContextContentBody">
-                  <div aria-hidden="true" className="absolute border-[1px_0px_0px] border-neutral-200 border-solid inset-0 pointer-events-none" />
-                  <div className="bg-clip-padding border-0 border-[transparent] border-solid box-border content-stretch flex flex-col h-[139px] items-start pb-0 pt-px px-0 relative w-full">
-                    <div className="basis-0 grow min-h-px min-w-px relative shrink-0 w-full">
-                      <div aria-hidden="true" className="absolute bg-clip-padding border-0 border-[transparent] border-solid box-border inset-0 pointer-events-none">
-                        <div className="absolute bg-[#d9d9d9] bg-clip-padding border-0 border-[transparent] border-solid box-border inset-0" />
-                        <div className="absolute bg-clip-padding border-0 border-[transparent] border-solid box-border inset-0 overflow-hidden">
-                          <img alt="" className="absolute h-[124.1%] left-0 max-w-none top-[-8.3%] w-full" src={imgTutorial} />
+                  <div className="h-[139px] relative shrink-0 w-full" data-name="ContextContentBody">
+                    <div aria-hidden="true" className="absolute border-[1px_0px_0px] border-neutral-200 border-solid inset-0 pointer-events-none" />
+                    <div className="bg-clip-padding border-0 border-[transparent] border-solid box-border content-stretch flex flex-col h-[139px] items-start pb-0 pt-px px-0 relative w-full">
+                      <div className="basis-0 grow min-h-px min-w-px relative shrink-0 w-full">
+                        <div aria-hidden="true" className="absolute bg-clip-padding border-0 border-[transparent] border-solid box-border inset-0 pointer-events-none">
+                          <div className="absolute bg-[#d9d9d9] bg-clip-padding border-0 border-[transparent] border-solid box-border inset-0" />
+                          <div className="absolute bg-clip-padding border-0 border-[transparent] border-solid box-border inset-0 overflow-hidden">
+                            <img alt="" className="absolute h-[124.1%] left-0 max-w-none top-[-8.3%] w-full" src={imgTutorial} />
+                          </div>
                         </div>
+                        <div className="bg-clip-padding border-0 border-[transparent] border-solid box-border size-full" />
                       </div>
-                      <div className="bg-clip-padding border-0 border-[transparent] border-solid box-border size-full" />
                     </div>
                   </div>
-                </div>
-                <div className="bg-neutral-100 relative shrink-0 w-full" data-name="ContextContentFooter">
-                  <div aria-hidden="true" className="absolute border-[1px_0px_0px] border-neutral-200 border-solid inset-0 pointer-events-none" />
-                  <div className="flex flex-row items-center size-full">
-                    <button className="bg-clip-padding border-0 border-[transparent] border-solid box-border content-stretch flex gap-[12px] items-center pb-[12px] pt-[13px] px-[12px] relative w-full hover:bg-neutral-200 transition-colors cursor-pointer">
-                      <p className="basis-0 font-['Geist:Regular',sans-serif] grow leading-[16px] min-h-px min-w-px not-italic relative shrink-0 text-[12px] text-neutral-500">Ver tutorial</p>
-                      <div className="flex h-[calc(1px*((var(--transform-inner-width)*1)+(var(--transform-inner-height)*0)))] items-center justify-center relative shrink-0 w-[calc(1px*((var(--transform-inner-height)*1)+(var(--transform-inner-width)*0)))]" style={{ "--transform-inner-width": "12", "--transform-inner-height": "12" } as React.CSSProperties}>
-                        <div className="flex-none rotate-[90deg]">
-                          <div className="relative" data-name="icon">
-                            <div className="bg-clip-padding border-0 border-[transparent] border-solid box-border content-stretch flex gap-[8px] items-center relative">
-                              <div className="overflow-clip relative shrink-0 size-[12px]" data-name="<ArrowUpIcon>">
-                                <div className="absolute inset-[16.67%]" data-name="Vector">
-                                  <div className="absolute inset-0" style={{ "--fill-0": "rgba(10, 10, 10, 1)" } as React.CSSProperties}>
-                                    <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 8 8">
-                                      <path d={svgPathsSidebar.p2fcb6240} fill="var(--fill-0, #0A0A0A)" id="Vector" />
-                                    </svg>
+                  <div className="bg-neutral-100 relative shrink-0 w-full" data-name="ContextContentFooter">
+                    <div aria-hidden="true" className="absolute border-[1px_0px_0px] border-neutral-200 border-solid inset-0 pointer-events-none" />
+                    <div className="flex flex-row items-center size-full">
+                      <button 
+                        onClick={() => setShowTutorial(true)}
+                        className="bg-clip-padding border-0 border-[transparent] border-solid box-border content-stretch flex gap-[12px] items-center pb-[12px] pt-[13px] px-[12px] relative w-full hover:bg-neutral-200 transition-colors cursor-pointer"
+                      >
+                        <p className="basis-0 font-['Geist:Regular',sans-serif] grow leading-[16px] min-h-px min-w-px not-italic relative shrink-0 text-[12px] text-neutral-500">Ver tutorial</p>
+                        <div className="flex h-[calc(1px*((var(--transform-inner-width)*1)+(var(--transform-inner-height)*0)))] items-center justify-center relative shrink-0 w-[calc(1px*((var(--transform-inner-height)*1)+(var(--transform-inner-width)*0)))]" style={{ "--transform-inner-width": "12", "--transform-inner-height": "12" } as React.CSSProperties}>
+                          <div className="flex-none rotate-[90deg]">
+                            <div className="relative" data-name="icon">
+                              <div className="bg-clip-padding border-0 border-[transparent] border-solid box-border content-stretch flex gap-[8px] items-center relative">
+                                <div className="overflow-clip relative shrink-0 size-[12px]" data-name="<ArrowUpIcon>">
+                                  <div className="absolute inset-[16.67%]" data-name="Vector">
+                                    <div className="absolute inset-0" style={{ "--fill-0": "rgba(10, 10, 10, 1)" } as React.CSSProperties}>
+                                      <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 8 8">
+                                        <path d={svgPathsSidebar.p2fcb6240} fill="var(--fill-0, #0A0A0A)" id="Vector" />
+                                      </svg>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div aria-hidden="true" className="absolute border border-neutral-200 border-solid inset-0 pointer-events-none rounded-[10px]" />
-            </div>
-            <div className="box-border content-stretch flex gap-[8px] items-center justify-end px-[40px] py-0 relative shrink-0" data-name="BranchSelector">
-              <button
-                onClick={handlePreviousTutorial}
-                className="bg-[rgba(255,255,255,0)] box-border content-stretch flex gap-[8px] items-center justify-center overflow-clip px-[10px] py-0 relative rounded-[9999px] shrink-0 size-[28px] hover:bg-neutral-200 transition-colors cursor-pointer"
-                data-name="BranchPrevious"
-              >
-                <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-name="icon">
-                  <div className="overflow-clip relative shrink-0 size-[16px]" data-name="svg">
-                    <div className="absolute inset-[20.83%_33.33%]" data-name="Vector">
-                      <div className="absolute inset-0" style={{ "--fill-0": "rgba(115, 115, 115, 1)" } as React.CSSProperties}>
-                        <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 6 10">
-                          <path d={svgPathsSidebar.p2b677780} fill="var(--fill-0, #737373)" id="Vector" />
-                        </svg>
-                      </div>
+                      </button>
                     </div>
                   </div>
                 </div>
-              </button>
-              <div className="content-stretch flex font-['Geist:Medium',sans-serif] gap-[2.5px] items-center justify-center leading-[normal] not-italic relative shrink-0 text-[12px] text-neutral-500 text-nowrap whitespace-pre" data-name="BranchPage">
-                <p className="relative shrink-0">{tutorialIndex + 1}</p>
-                <p className="relative shrink-0">of</p>
-                <p className="relative shrink-0">3</p>
+                <div aria-hidden="true" className="absolute border border-neutral-200 border-solid inset-0 pointer-events-none rounded-[10px]" />
               </div>
-              <button
-                onClick={handleNextTutorial}
-                className="bg-[rgba(255,255,255,0)] box-border content-stretch flex gap-[8px] items-center justify-center overflow-clip px-[10px] py-0 relative rounded-[9999px] shrink-0 size-[28px] hover:bg-neutral-200 transition-colors cursor-pointer"
-                data-name="BranchNext"
-              >
-                <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-name="icon">
-                  <div className="overflow-clip relative shrink-0 size-[16px]" data-name="svg">
-                    <div className="absolute inset-[20.83%_33.33%]" data-name="Vector">
-                      <div className="absolute inset-0" style={{ "--fill-0": "rgba(115, 115, 115, 1)" } as React.CSSProperties}>
-                        <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 6 10">
-                          <path d={svgPathsSidebar.p2fed9780} fill="var(--fill-0, #737373)" id="Vector" />
-                        </svg>
+              <div className="box-border content-stretch flex gap-[8px] items-center justify-end px-[40px] py-0 relative shrink-0" data-name="BranchSelector">
+                <button
+                  onClick={handlePreviousTutorial}
+                  className="bg-[rgba(255,255,255,0)] box-border content-stretch flex gap-[8px] items-center justify-center overflow-clip px-[10px] py-0 relative rounded-[9999px] shrink-0 size-[28px] hover:bg-neutral-200 transition-colors cursor-pointer"
+                  data-name="BranchPrevious"
+                >
+                  <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-name="icon">
+                    <div className="overflow-clip relative shrink-0 size-[16px]" data-name="svg">
+                      <div className="absolute inset-[20.83%_33.33%]" data-name="Vector">
+                        <div className="absolute inset-0" style={{ "--fill-0": "rgba(115, 115, 115, 1)" } as React.CSSProperties}>
+                          <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 6 10">
+                            <path d={svgPathsSidebar.p2b677780} fill="var(--fill-0, #737373)" id="Vector" />
+                          </svg>
+                        </div>
                       </div>
                     </div>
                   </div>
+                </button>
+                <div className="content-stretch flex font-['Geist:Medium',sans-serif] gap-[2.5px] items-center justify-center leading-[normal] not-italic relative shrink-0 text-[12px] text-neutral-500 text-nowrap whitespace-pre" data-name="BranchPage">
+                  <p className="relative shrink-0">{tutorialIndex + 1}</p>
+                  <p className="relative shrink-0">of</p>
+                  <p className="relative shrink-0">3</p>
                 </div>
-              </button>
+                <button
+                  onClick={handleNextTutorial}
+                  className="bg-[rgba(255,255,255,0)] box-border content-stretch flex gap-[8px] items-center justify-center overflow-clip px-[10px] py-0 relative rounded-[9999px] shrink-0 size-[28px] hover:bg-neutral-200 transition-colors cursor-pointer"
+                  data-name="BranchNext"
+                >
+                  <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-name="icon">
+                    <div className="overflow-clip relative shrink-0 size-[16px]" data-name="svg">
+                      <div className="absolute inset-[20.83%_33.33%]" data-name="Vector">
+                        <div className="absolute inset-0" style={{ "--fill-0": "rgba(115, 115, 115, 1)" } as React.CSSProperties}>
+                          <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 6 10">
+                            <path d={svgPathsSidebar.p2fed9780} fill="var(--fill-0, #737373)" id="Vector" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Middle Panel - PDF */}
-      <div className="bg-white box-border content-stretch flex flex-col gap-[10px] h-full items-center px-[20px] py-[15px] relative shrink-0 w-[691px]">
+      <div 
+        className="bg-white box-border content-stretch flex flex-col gap-[10px] h-full items-center px-[20px] py-[15px] relative shrink-0 transition-all duration-300"
+        style={{ width: `${pdfWidth}px` }}
+      >
         <div aria-hidden="true" className="absolute border-[0px_1px_0px_0px] border-neutral-200 border-solid inset-0 pointer-events-none" />
         
         {/* Preview/Edit Toggle and Actions */}
@@ -935,9 +994,9 @@ export default function App() {
             </button>
           </div>
           
-          <div className="content-stretch flex h-[28px] items-center relative shrink-0" data-name="OpenIn">
+          <div className="content-stretch flex h-[28px] items-center gap-[8px] relative shrink-0" data-name="OpenIn">
             <div className="content-stretch flex items-start relative shrink-0" data-name="OpenInTrigger">
-              <div className="bg-white relative rounded-[8px] shrink-0" data-name="Button">
+              <button className="bg-white relative rounded-[8px] shrink-0">
                 <div className="box-border content-stretch flex gap-[6px] items-center justify-center overflow-clip px-[8px] py-[4px] relative rounded-[inherit]">
                   <div className="relative shrink-0 size-[14px]" data-name="image 350">
                     <img alt="" className="absolute inset-0 max-w-none object-50%-50% object-cover pointer-events-none size-full" src={imgHolded} />
@@ -954,120 +1013,148 @@ export default function App() {
                   </div>
                 </div>
                 <div aria-hidden="true" className="absolute border border-neutral-200 border-solid inset-0 pointer-events-none rounded-[8px]" />
-              </div>
+              </button>
             </div>
+            
+            {/* Action Buttons */}
+            <button className="bg-[rgba(255,255,255,0)] box-border content-stretch flex gap-[6px] items-center justify-center min-w-[32px] overflow-clip p-[6px] relative rounded-[8px] shrink-0 size-[32px] hover:bg-neutral-100 transition-colors">
+              <Share2 className="w-[16px] h-[16px] text-neutral-500" />
+            </button>
+            <button className="bg-[rgba(255,255,255,0)] box-border content-stretch flex gap-[6px] items-center justify-center min-w-[32px] overflow-clip p-[6px] relative rounded-[8px] shrink-0 size-[32px] hover:bg-neutral-100 transition-colors">
+              <Heart className="w-[16px] h-[16px] text-neutral-500" />
+            </button>
+            <button className="bg-[rgba(255,255,255,0)] box-border content-stretch flex gap-[6px] items-center justify-center min-w-[32px] overflow-clip p-[6px] relative rounded-[8px] shrink-0 size-[32px] hover:bg-neutral-100 transition-colors">
+              <MoreHorizontal className="w-[16px] h-[16px] text-neutral-500" />
+            </button>
           </div>
         </div>
 
-        {/* PDF Content */}
-        <div className="basis-0 grow min-h-px min-w-px relative shrink-0 w-full overflow-y-auto">
+        {/* PDF Content with custom scrollbar */}
+        <div className="basis-0 grow min-h-px min-w-px relative shrink-0 w-full overflow-y-auto pdf-scrollbar">
+          <style>{`
+            .pdf-scrollbar::-webkit-scrollbar {
+              width: 8px;
+            }
+            .pdf-scrollbar::-webkit-scrollbar-track {
+              background: #f3f3f3;
+              border-radius: 10px;
+            }
+            .pdf-scrollbar::-webkit-scrollbar-thumb {
+              background: #d4d4d4;
+              border-radius: 10px;
+            }
+            .pdf-scrollbar::-webkit-scrollbar-thumb:hover {
+              background: #a3a3a3;
+            }
+          `}</style>
+          
           {viewMode === "preview" ? (
             /* Preview Mode - PDF */
-            <div className="bg-white box-border content-stretch flex flex-col gap-[20px] h-[842px] items-start p-[40px] relative shrink-0">
-            {/* Logo and Company Info */}
-            <div className="content-stretch flex items-center justify-between relative shrink-0 w-[553px]">
-              <div className="flex flex-row items-center self-stretch">
-                <div className="aspect-[800/800] h-full relative shrink-0" data-name="[LIGHT MODE] ARKCUTT LOGO 2">
-                  <img alt="" className="absolute inset-0 max-w-none object-50%-50% object-cover pointer-events-none size-full" src={imgLogo} />
-                </div>
-              </div>
-              <div className="content-stretch flex flex-col font-['Geist:Regular',sans-serif] items-end not-italic relative shrink-0 text-[11px] text-neutral-500 text-right">
-                <p className="leading-[11px] relative shrink-0 text-nowrap whitespace-pre">Asociación Junior Empresa MAKOSITE</p>
-                <p className="leading-[11px] relative shrink-0 text-nowrap whitespace-pre">G72660145</p>
-                <div className="leading-[11px] relative shrink-0 w-[193px]">
-                  <p className="mb-0">Carrer Ciutat d'Asunción, 16</p>
-                  <p>Barcelona (08030), Barcelona, España</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="h-0 relative shrink-0 w-[553px]">
-              <div className="absolute bottom-0 left-0 right-0 top-[-1px]" style={{ "--stroke-0": "rgba(229, 229, 229, 1)" } as React.CSSProperties}>
-                <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 553 1">
-                  <line id="Line 96" stroke="var(--stroke-0, #E5E5E5)" x2="553" y1="0.5" y2="0.5" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Budget Header */}
-            <div className="content-stretch flex flex-col gap-[35px] items-start relative shrink-0 w-[553px]">
-              <div className="content-stretch flex items-start justify-between relative shrink-0 w-full">
-                <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[14px] text-neutral-950 text-nowrap whitespace-pre">Presupuesto · {currentBudgetData.budgetNumber}</p>
-                <div className="content-stretch flex flex-col font-['Geist:Regular',sans-serif] gap-[2px] items-end leading-[11px] not-italic relative shrink-0 text-[11px] text-neutral-500 text-right w-[193px]">
-                  <p className="relative shrink-0 w-full">Fecha: {currentBudgetData.date}</p>
-                  <p className="relative shrink-0 w-full">Vencimiento: {currentBudgetData.dueDate}</p>
-                </div>
-              </div>
-              <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between not-italic relative shrink-0 w-full">
-                <div className="content-stretch flex flex-col gap-[2px] items-start relative shrink-0 w-[81px]">
-                  <p className="leading-[12px] relative shrink-0 text-[12px] text-neutral-950 w-full">{currentBudgetData.clientName}</p>
-                  <p className="leading-[11px] relative shrink-0 text-[11px] text-neutral-500 w-full">{currentBudgetData.clientLocation}</p>
-                </div>
-                <p className="leading-[16px] relative shrink-0 text-[20px] text-neutral-950 text-nowrap whitespace-pre">Total {calculateTotal().toFixed(2)}€</p>
-              </div>
-            </div>
-
-            <div className="h-0 relative shrink-0 w-[553px]">
-              <div className="absolute bottom-0 left-0 right-0 top-[-1px]" style={{ "--stroke-0": "rgba(229, 229, 229, 1)" } as React.CSSProperties}>
-                <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 553 1">
-                  <line id="Line 96" stroke="var(--stroke-0, #E5E5E5)" x2="553" y1="0.5" y2="0.5" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Budget Items */}
-            <div className="content-stretch flex flex-col gap-[12px] items-end relative shrink-0 w-[553px]">
-              <div className="content-stretch flex flex-col gap-[28px] items-start relative shrink-0 w-full">
-                {/* Table Header */}
-                <div className="content-stretch flex gap-[145px] items-center relative shrink-0 w-full">
-                  <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[14px] text-neutral-950 text-nowrap whitespace-pre">Concepto</p>
-                  <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between leading-[16px] not-italic relative shrink-0 text-[14px] text-center text-neutral-950 w-[345px]">
-                    <p className="relative shrink-0 text-nowrap whitespace-pre">Precio</p>
-                    <p className="relative shrink-0 text-nowrap whitespace-pre">Unidades</p>
-                    <p className="relative shrink-0 text-nowrap whitespace-pre">Subtotal</p>
-                    <p className="relative shrink-0 w-[20px]">Iva</p>
-                    <p className="relative shrink-0 w-[38px]">Total</p>
+            <div className="bg-white box-border content-stretch flex flex-col gap-[20px] min-h-[842px] items-start p-[40px] relative shrink-0">
+              {/* Logo and Company Info */}
+              <div className="content-stretch flex items-center justify-between relative shrink-0 w-full max-w-[553px]">
+                <div className="flex flex-row items-center self-stretch">
+                  <div className="aspect-[800/800] h-full relative shrink-0" data-name="[LIGHT MODE] ARKCUTT LOGO 2">
+                    <img alt="" className="absolute inset-0 max-w-none object-50%-50% object-cover pointer-events-none size-full" src={imgLogo} />
                   </div>
                 </div>
-
-                {/* Items */}
-                {currentBudgetData.items.map((item) => (
-                  <div key={item.id} className="content-stretch flex items-start justify-between relative shrink-0 w-full">
-                    <div className="content-stretch flex flex-col font-['Geist:Regular',sans-serif] gap-[2px] items-start not-italic relative shrink-0 text-nowrap w-[81px] whitespace-pre">
-                      <p className="leading-[12px] relative shrink-0 text-[12px] text-neutral-950">{item.concept}</p>
-                      <p className="leading-[11px] relative shrink-0 text-[11px] text-neutral-500">{item.description}</p>
-                    </div>
-                    <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between leading-[11px] not-italic relative shrink-0 text-[11px] text-neutral-500 w-[345px]">
-                      <p className="relative shrink-0 text-right w-[41px]">{item.pricePerUnit.toFixed(2)}€</p>
-                      <p className="relative shrink-0 text-right w-[60px]">{item.quantity}</p>
-                      <p className="relative shrink-0 text-right w-[55px]">{calculateSubtotal(item).toFixed(2)}€</p>
-                      <p className="relative shrink-0 w-[20px]">{item.ivaRate}%</p>
-                      <p className="relative shrink-0 text-nowrap text-right whitespace-pre">{calculateItemTotal(item).toFixed(2)}€</p>
-                    </div>
+                <div className="content-stretch flex flex-col font-['Geist:Regular',sans-serif] items-end not-italic relative shrink-0 text-[11px] text-neutral-500 text-right">
+                  <p className="leading-[11px] relative shrink-0 text-nowrap whitespace-pre">Asociación Junior Empresa MAKOSITE</p>
+                  <p className="leading-[11px] relative shrink-0 text-nowrap whitespace-pre">G72660145</p>
+                  <div className="leading-[11px] relative shrink-0 w-[193px]">
+                    <p className="mb-0">Carrer Ciutat d'Asunción, 16</p>
+                    <p>Barcelona (08030), Barcelona, España</p>
                   </div>
-                ))}
+                </div>
               </div>
 
-              {/* Totals */}
-              <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[175px]">
-                <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between leading-[16px] not-italic relative shrink-0 text-center text-neutral-950 text-nowrap w-full whitespace-pre">
-                  <p className="relative shrink-0 text-[14px]">Base Imponible</p>
-                  <p className="relative shrink-0 text-[11px]">{calculateBaseImponible().toFixed(2)}€</p>
+              <div className="h-0 relative shrink-0 w-full max-w-[553px]">
+                <div className="absolute bottom-0 left-0 right-0 top-[-1px]" style={{ "--stroke-0": "rgba(229, 229, 229, 1)" } as React.CSSProperties}>
+                  <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 553 1">
+                    <line id="Line 96" stroke="var(--stroke-0, #E5E5E5)" x2="553" y1="0.5" y2="0.5" />
+                  </svg>
                 </div>
-                <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between leading-[16px] not-italic relative shrink-0 text-neutral-950 w-full">
-                  <p className="relative shrink-0 text-[14px] text-right w-[99px]">Iva</p>
-                  <p className="relative shrink-0 text-[11px] text-center text-nowrap whitespace-pre">{calculateTotalIVA().toFixed(2)}€</p>
+              </div>
+
+              {/* Budget Header */}
+              <div className="content-stretch flex flex-col gap-[35px] items-start relative shrink-0 w-full max-w-[553px]">
+                <div className="content-stretch flex items-start justify-between relative shrink-0 w-full">
+                  <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[14px] text-neutral-950 text-nowrap whitespace-pre">Presupuesto · {currentBudgetData.budgetNumber}</p>
+                  <div className="content-stretch flex flex-col font-['Geist:Regular',sans-serif] gap-[2px] items-end leading-[11px] not-italic relative shrink-0 text-[11px] text-neutral-500 text-right w-[193px]">
+                    <p className="relative shrink-0 w-full">Fecha: {currentBudgetData.date}</p>
+                    <p className="relative shrink-0 w-full">Vencimiento: {currentBudgetData.dueDate}</p>
+                  </div>
                 </div>
-                <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between leading-[16px] not-italic relative shrink-0 text-neutral-950 w-full">
-                  <p className="relative shrink-0 text-[14px] text-right w-[99px]">Total</p>
-                  <p className="relative shrink-0 text-[11px] text-center text-nowrap whitespace-pre">{calculateTotal().toFixed(2)}€</p>
+                <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between not-italic relative shrink-0 w-full">
+                  <div className="content-stretch flex flex-col gap-[2px] items-start relative shrink-0 w-[81px]">
+                    <p className="leading-[12px] relative shrink-0 text-[12px] text-neutral-950 w-full">{currentBudgetData.clientName}</p>
+                    <p className="leading-[11px] relative shrink-0 text-[11px] text-neutral-500 w-full">{currentBudgetData.clientLocation}</p>
+                  </div>
+                  <p className="leading-[16px] relative shrink-0 text-[20px] text-neutral-950 text-nowrap whitespace-pre">Total {calculateTotal().toFixed(2)}€</p>
+                </div>
+              </div>
+
+              <div className="h-0 relative shrink-0 w-full max-w-[553px]">
+                <div className="absolute bottom-0 left-0 right-0 top-[-1px]" style={{ "--stroke-0": "rgba(229, 229, 229, 1)" } as React.CSSProperties}>
+                  <svg className="block size-full" fill="none" preserveAspectRatio="none" viewBox="0 0 553 1">
+                    <line id="Line 96" stroke="var(--stroke-0, #E5E5E5)" x2="553" y1="0.5" y2="0.5" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Budget Items */}
+              <div className="content-stretch flex flex-col gap-[12px] items-end relative shrink-0 w-full max-w-[553px]">
+                <div className="content-stretch flex flex-col gap-[28px] items-start relative shrink-0 w-full">
+                  {/* Table Header */}
+                  <div className="content-stretch flex gap-[145px] items-center relative shrink-0 w-full">
+                    <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[14px] text-neutral-950 text-nowrap whitespace-pre">Concepto</p>
+                    <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between leading-[16px] not-italic relative shrink-0 text-[14px] text-center text-neutral-950 w-[345px]">
+                      <p className="relative shrink-0 text-nowrap whitespace-pre">Precio</p>
+                      <p className="relative shrink-0 text-nowrap whitespace-pre">Unidades</p>
+                      <p className="relative shrink-0 text-nowrap whitespace-pre">Subtotal</p>
+                      <p className="relative shrink-0 w-[20px]">Iva</p>
+                      <p className="relative shrink-0 w-[38px]">Total</p>
+                    </div>
+                  </div>
+
+                  {/* Items */}
+                  {currentBudgetData.items.map((item) => (
+                    <div key={item.id} className="content-stretch flex items-start justify-between relative shrink-0 w-full">
+                      <div className="content-stretch flex flex-col font-['Geist:Regular',sans-serif] gap-[2px] items-start not-italic relative shrink-0 text-nowrap w-[81px] whitespace-pre">
+                        <p className="leading-[12px] relative shrink-0 text-[12px] text-neutral-950">{item.concept}</p>
+                        <p className="leading-[11px] relative shrink-0 text-[11px] text-neutral-500">{item.description}</p>
+                      </div>
+                      <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between leading-[11px] not-italic relative shrink-0 text-[11px] text-neutral-500 w-[345px]">
+                        <p className="relative shrink-0 text-right w-[41px]">{item.pricePerUnit.toFixed(2)}€</p>
+                        <p className="relative shrink-0 text-right w-[60px]">{item.quantity}</p>
+                        <p className="relative shrink-0 text-right w-[55px]">{calculateSubtotal(item).toFixed(2)}€</p>
+                        <p className="relative shrink-0 w-[20px]">{item.ivaRate}%</p>
+                        <p className="relative shrink-0 text-nowrap text-right whitespace-pre">{calculateItemTotal(item).toFixed(2)}€</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Totals */}
+                <div className="content-stretch flex flex-col gap-[24px] items-start relative shrink-0 w-[175px]">
+                  <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between leading-[16px] not-italic relative shrink-0 text-center text-neutral-950 text-nowrap w-full whitespace-pre">
+                    <p className="relative shrink-0 text-[14px]">Base Imponible</p>
+                    <p className="relative shrink-0 text-[11px]">{calculateBaseImponible().toFixed(2)}€</p>
+                  </div>
+                  <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between leading-[16px] not-italic relative shrink-0 text-neutral-950 w-full">
+                    <p className="relative shrink-0 text-[14px] text-right w-[99px]">Iva</p>
+                    <p className="relative shrink-0 text-[11px] text-center text-nowrap whitespace-pre">{calculateTotalIVA().toFixed(2)}€</p>
+                  </div>
+                  <div className="content-stretch flex font-['Geist:Regular',sans-serif] items-center justify-between leading-[16px] not-italic relative shrink-0 text-neutral-950 w-full">
+                    <p className="relative shrink-0 text-[14px] text-right w-[99px]">Total</p>
+                    <p className="relative shrink-0 text-[11px] text-center text-nowrap whitespace-pre">{calculateTotal().toFixed(2)}€</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
           ) : (
             /* Edit Mode - Form */
-            <div className="bg-white box-border content-stretch flex flex-col gap-[20px] items-start p-[40px] relative shrink-0 overflow-y-auto">
+            <div className="bg-white box-border content-stretch flex flex-col gap-[20px] items-start p-[40px] relative shrink-0">
               {/* Logo and Company Info - Static */}
               <div className="content-stretch flex items-center justify-between relative shrink-0 w-full max-w-[553px]">
                 <div className="flex flex-row items-center self-stretch">
@@ -1094,49 +1181,64 @@ export default function App() {
               </div>
 
               {/* Budget Header - Editable */}
-              <div className="content-stretch flex flex-col gap-[25px] items-start relative shrink-0 w-full max-w-[553px]">
-                <div className="content-stretch flex items-start justify-between gap-[20px] relative shrink-0 w-full">
-                  <div className="flex flex-col gap-[8px] w-[200px]">
-                    <label className="font-['Geist:Regular',sans-serif] text-[12px] text-neutral-500">Número Presupuesto</label>
-                    <Input 
-                      value={currentBudgetData.budgetNumber}
-                      onChange={(e) => updateBudgetField("budgetNumber", e.target.value)}
-                      className="h-[32px] text-[14px]"
-                    />
+              <div className="content-stretch flex flex-col gap-[20px] items-start relative shrink-0 w-full max-w-[553px]">
+                <div className="content-stretch flex items-start gap-[62px] relative shrink-0 w-full">
+                  <div className="content-stretch flex flex-col gap-[7px] items-start relative shrink-0">
+                    <p className="font-['Geist:Regular',sans-serif] leading-[11px] not-italic relative shrink-0 text-[11px] text-neutral-500 w-full">Numero Presupuesto</p>
+                    <div className="bg-[#f3f3f3] box-border border border-neutral-200 rounded-[6px] px-[10px] py-[4px]">
+                      <input 
+                        type="text"
+                        value={currentBudgetData.budgetNumber}
+                        onChange={(e) => updateBudgetField("budgetNumber", e.target.value)}
+                        className="font-['Geist:Regular',sans-serif] leading-[16px] text-[14px] text-neutral-950 bg-transparent border-none outline-none"
+                      />
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-[8px] flex-1">
-                    <label className="font-['Geist:Regular',sans-serif] text-[12px] text-neutral-500">Fecha</label>
-                    <Input 
-                      value={currentBudgetData.date}
-                      onChange={(e) => updateBudgetField("date", e.target.value)}
-                      className="h-[32px] text-[14px]"
-                    />
+                  <div className="content-stretch flex flex-col gap-[7px] items-start relative shrink-0 w-[118px]">
+                    <p className="font-['Geist:Regular',sans-serif] leading-[11px] not-italic relative shrink-0 text-[11px] text-neutral-500 w-full">Fecha</p>
+                    <div className="bg-[#f3f3f3] box-border border border-neutral-200 rounded-[6px] px-[10px] py-[4px] w-full">
+                      <input 
+                        type="text"
+                        value={currentBudgetData.date}
+                        onChange={(e) => updateBudgetField("date", e.target.value)}
+                        className="font-['Geist:Regular',sans-serif] leading-[20px] text-[14px] text-slate-950 bg-transparent border-none outline-none w-full"
+                      />
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-[8px] flex-1">
-                    <label className="font-['Geist:Regular',sans-serif] text-[12px] text-neutral-500">Vencimiento</label>
-                    <Input 
-                      value={currentBudgetData.dueDate}
-                      onChange={(e) => updateBudgetField("dueDate", e.target.value)}
-                      className="h-[32px] text-[14px]"
-                    />
+                  <div className="content-stretch flex flex-col gap-[7px] items-start relative shrink-0 w-[118px]">
+                    <p className="font-['Geist:Regular',sans-serif] leading-[11px] not-italic relative shrink-0 text-[11px] text-neutral-500 w-full">Vencimiento</p>
+                    <div className="bg-[#f3f3f3] box-border border border-neutral-200 rounded-[6px] px-[10px] py-[4px] w-full">
+                      <input 
+                        type="text"
+                        value={currentBudgetData.dueDate}
+                        onChange={(e) => updateBudgetField("dueDate", e.target.value)}
+                        className="font-['Geist:Regular',sans-serif] leading-[20px] text-[14px] text-slate-950 bg-transparent border-none outline-none w-full"
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="content-stretch flex items-center justify-between gap-[20px] relative shrink-0 w-full">
-                  <div className="flex flex-col gap-[8px] w-[200px]">
-                    <label className="font-['Geist:Regular',sans-serif] text-[12px] text-neutral-500">Cliente</label>
-                    <Input 
-                      value={currentBudgetData.clientName}
-                      onChange={(e) => updateBudgetField("clientName", e.target.value)}
-                      className="h-[32px] text-[14px]"
-                    />
+                <div className="content-stretch flex items-center justify-between relative shrink-0 w-full">
+                  <div className="content-stretch flex flex-col gap-[7px] items-start relative shrink-0">
+                    <p className="font-['Geist:Regular',sans-serif] leading-[11px] not-italic relative shrink-0 text-[11px] text-neutral-500 w-full">Cliente</p>
+                    <div className="bg-[#f3f3f3] box-border border border-neutral-200 rounded-[6px] px-[10px] py-[4px]">
+                      <input 
+                        type="text"
+                        value={currentBudgetData.clientName}
+                        onChange={(e) => updateBudgetField("clientName", e.target.value)}
+                        className="font-['Geist:Regular',sans-serif] leading-[20px] text-[14px] text-slate-950 bg-transparent border-none outline-none"
+                      />
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-[8px] flex-1">
-                    <label className="font-['Geist:Regular',sans-serif] text-[12px] text-neutral-500">Ubicación</label>
-                    <Input 
-                      value={currentBudgetData.clientLocation}
-                      onChange={(e) => updateBudgetField("clientLocation", e.target.value)}
-                      className="h-[32px] text-[14px]"
-                    />
+                  <div className="content-stretch flex flex-col gap-[7px] items-start relative shrink-0 w-[270px]">
+                    <p className="font-['Geist:Regular',sans-serif] leading-[11px] not-italic relative shrink-0 text-[11px] text-neutral-500 w-full">Ubicación</p>
+                    <div className="bg-[#f3f3f3] box-border border border-neutral-200 rounded-[6px] px-[10px] py-[4px] w-full">
+                      <input 
+                        type="text"
+                        value={currentBudgetData.clientLocation}
+                        onChange={(e) => updateBudgetField("clientLocation", e.target.value)}
+                        className="font-['Geist:Regular',sans-serif] leading-[20px] text-[14px] text-slate-950 bg-transparent border-none outline-none w-full"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1150,122 +1252,133 @@ export default function App() {
               </div>
 
               {/* Budget Items - Editable */}
-              <div className="content-stretch flex flex-col gap-[12px] items-start relative shrink-0 w-full max-w-[553px]">
-                <div className="flex items-center justify-between w-full">
-                  <p className="font-['Geist:Regular',sans-serif] text-[14px] text-neutral-950">Conceptos</p>
-                  <Button
+              <div className="content-stretch flex flex-col gap-[20px] items-start relative shrink-0 w-full max-w-[553px]">
+                <div className="content-stretch flex items-center justify-between relative shrink-0 w-full">
+                  <p className="font-['Geist:Regular',sans-serif] leading-[16px] not-italic relative shrink-0 text-[14px] text-neutral-950 text-nowrap whitespace-pre">Concepto</p>
+                  <button
                     onClick={addBudgetItem}
-                    size="sm"
-                    variant="outline"
-                    className="h-[28px] gap-[4px]"
+                    className="bg-white border border-neutral-200 rounded-[8px] px-[8px] py-[4px] flex items-center gap-[6px] hover:bg-neutral-50 transition-colors"
                   >
-                    <Plus className="w-[14px] h-[14px]" />
-                    Añadir concepto
-                  </Button>
+                    <Plus className="w-[16px] h-[16px] text-neutral-950" />
+                    <p className="font-['Geist:Medium',sans-serif] leading-[20px] text-[12px] text-neutral-950">Añadir Fila</p>
+                  </button>
                 </div>
 
                 {currentBudgetData.items.map((item) => (
-                  <div key={item.id} className="bg-neutral-50 border border-neutral-200 rounded-[8px] p-[16px] w-full">
-                    <div className="flex flex-col gap-[12px]">
-                      <div className="flex gap-[12px] items-start">
-                        <div className="flex flex-col gap-[8px] flex-1">
-                          <label className="font-['Geist:Regular',sans-serif] text-[11px] text-neutral-500">Concepto</label>
-                          <Input 
-                            value={item.concept}
-                            onChange={(e) => updateBudgetItem(item.id, "concept", e.target.value)}
-                            className="h-[32px] text-[12px]"
-                            placeholder="Ej: Servicio Corte Láser"
-                          />
+                  <div key={item.id} className="bg-[#f3f3f3] border border-neutral-200 rounded-[6px] p-[10px] w-full">
+                    <div className="flex flex-col gap-[10px]">
+                      {/* Concept and Delete */}
+                      <div className="flex gap-[20px] items-center">
+                        <div className="flex-1 flex flex-col gap-[6px]">
+                          <p className="font-['Geist:Regular',sans-serif] leading-[11px] text-[11px] text-neutral-500">Concepto</p>
+                          <div className="bg-[#f3f3f3] border border-neutral-200 rounded-[6px] px-[10px] py-[4px]">
+                            <input 
+                              type="text"
+                              value={item.concept}
+                              onChange={(e) => updateBudgetItem(item.id, "concept", e.target.value)}
+                              className="font-['Geist:Regular',sans-serif] leading-[16px] text-[14px] text-neutral-950 bg-transparent border-none outline-none w-full"
+                              placeholder="Ej: Servicio Corte Láser"
+                            />
+                          </div>
                         </div>
-                        <Button
+                        <button
                           onClick={() => removeBudgetItem(item.id)}
-                          size="sm"
-                          variant="ghost"
-                          className="h-[32px] w-[32px] p-0 mt-[20px]"
+                          className="mt-[20px] rotate-45"
                         >
-                          <Trash2 className="w-[14px] h-[14px] text-red-500" />
-                        </Button>
+                          <Plus className="w-[16px] h-[16px] text-neutral-950" />
+                        </button>
                       </div>
 
-                      <div className="flex flex-col gap-[8px]">
-                        <label className="font-['Geist:Regular',sans-serif] text-[11px] text-neutral-500">Descripción</label>
-                        <Input 
-                          value={item.description}
-                          onChange={(e) => updateBudgetItem(item.id, "description", e.target.value)}
-                          className="h-[32px] text-[12px]"
-                          placeholder="Ej: Precio €/min de corte"
-                        />
+                      {/* Description */}
+                      <div className="flex flex-col gap-[6px]">
+                        <p className="font-['Geist:Regular',sans-serif] leading-[11px] text-[11px] text-neutral-500">Descripción</p>
+                        <div className="bg-[#f3f3f3] border border-neutral-200 rounded-[6px] px-[10px] py-[4px]">
+                          <input 
+                            type="text"
+                            value={item.description}
+                            onChange={(e) => updateBudgetItem(item.id, "description", e.target.value)}
+                            className="font-['Geist:Regular',sans-serif] leading-[16px] text-[14px] text-neutral-950 bg-transparent border-none outline-none w-full"
+                            placeholder="Ej: Precio €/min de corte"
+                          />
+                        </div>
                       </div>
 
-                      <div className="grid grid-cols-4 gap-[12px]">
-                        <div className="flex flex-col gap-[8px]">
-                          <label className="font-['Geist:Regular',sans-serif] text-[11px] text-neutral-500">Precio/u</label>
-                          <Input 
-                            type="number"
-                            step="0.01"
-                            value={item.pricePerUnit}
-                            onChange={(e) => updateBudgetItem(item.id, "pricePerUnit", parseFloat(e.target.value) || 0)}
-                            className="h-[32px] text-[12px]"
-                          />
+                      {/* Price, Units, IVA, Subtotal */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex flex-col gap-[7px]">
+                          <p className="font-['Geist:Regular',sans-serif] leading-[11px] text-[11px] text-neutral-500">Precio</p>
+                          <div className="bg-[#f3f3f3] border border-neutral-200 rounded-[6px] px-[10px] py-[4px] w-[96px]">
+                            <input 
+                              type="number"
+                              step="0.01"
+                              value={item.pricePerUnit}
+                              onChange={(e) => updateBudgetItem(item.id, "pricePerUnit", parseFloat(e.target.value) || 0)}
+                              className="font-['Geist:Regular',sans-serif] leading-[16px] text-[14px] text-neutral-950 bg-transparent border-none outline-none w-full"
+                            />
+                          </div>
                         </div>
-                        <div className="flex flex-col gap-[8px]">
-                          <label className="font-['Geist:Regular',sans-serif] text-[11px] text-neutral-500">Unidades</label>
-                          <Input 
-                            type="number"
-                            step="0.01"
-                            value={item.quantity}
-                            onChange={(e) => updateBudgetItem(item.id, "quantity", parseFloat(e.target.value) || 0)}
-                            className="h-[32px] text-[12px]"
-                          />
+                        <div className="flex flex-col gap-[7px]">
+                          <p className="font-['Geist:Regular',sans-serif] leading-[11px] text-[11px] text-neutral-500">Unidades</p>
+                          <div className="bg-[#f3f3f3] border border-neutral-200 rounded-[6px] px-[10px] py-[4px] w-[91px]">
+                            <input 
+                              type="number"
+                              step="0.01"
+                              value={item.quantity}
+                              onChange={(e) => updateBudgetItem(item.id, "quantity", parseFloat(e.target.value) || 0)}
+                              className="font-['Geist:Regular',sans-serif] leading-[20px] text-[14px] text-slate-950 bg-transparent border-none outline-none w-full"
+                            />
+                          </div>
                         </div>
-                        <div className="flex flex-col gap-[8px]">
-                          <label className="font-['Geist:Regular',sans-serif] text-[11px] text-neutral-500">IVA</label>
-                          <Select 
-                            value={item.ivaRate.toString()}
-                            onValueChange={(value) => updateBudgetItem(item.id, "ivaRate", parseInt(value))}
-                          >
-                            <SelectTrigger className="h-[32px] text-[12px]">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="21">21%</SelectItem>
-                              <SelectItem value="10">10%</SelectItem>
-                              <SelectItem value="4">4%</SelectItem>
-                              <SelectItem value="0">Exenta</SelectItem>
-                            </SelectContent>
-                          </Select>
+                        <div className="flex flex-col gap-[7px]">
+                          <p className="font-['Geist:Regular',sans-serif] leading-[11px] text-[11px] text-neutral-500">IVA</p>
+                          <div className="relative w-[94px]">
+                            <select
+                              value={item.ivaRate}
+                              onChange={(e) => updateBudgetItem(item.id, "ivaRate", parseInt(e.target.value))}
+                              className="bg-[#f3f3f3] border border-neutral-200 rounded-[6px] px-[10px] py-[4px] font-['Geist:Regular',sans-serif] leading-[20px] text-[14px] text-slate-950 w-full appearance-none pr-[30px]"
+                            >
+                              <option value="21">21%</option>
+                              <option value="10">10%</option>
+                              <option value="4">4%</option>
+                              <option value="0">Exenta</option>
+                            </select>
+                            <div className="absolute right-[10px] top-1/2 -translate-y-1/2 pointer-events-none">
+                              <svg className="w-[12px] h-[12px]" fill="none" viewBox="0 0 12 12">
+                                <path d={svgPathsEdit.p1e450100} fill="currentColor" />
+                              </svg>
+                            </div>
+                          </div>
                         </div>
-                        <div className="flex flex-col gap-[8px]">
-                          <label className="font-['Geist:Regular',sans-serif] text-[11px] text-neutral-500">Subtotal</label>
-                          <div className="h-[32px] flex items-center px-[12px] bg-neutral-100 rounded-[6px] border border-neutral-200">
-                            <p className="font-['Geist:Regular',sans-serif] text-[12px] text-neutral-950">{calculateSubtotal(item).toFixed(2)}€</p>
+                        <div className="flex flex-col gap-[7px]">
+                          <p className="font-['Geist:Regular',sans-serif] leading-[11px] text-[11px] text-neutral-500">Subtotal</p>
+                          <div className="bg-[#f3f3f3] border border-neutral-200 rounded-[6px] px-[10px] py-[4px] w-[91px]">
+                            <p className="font-['Geist:Regular',sans-serif] leading-[20px] text-[14px] text-slate-950">{calculateSubtotal(item).toFixed(2)}</p>
                           </div>
                         </div>
                       </div>
 
-                      <div className="flex justify-end gap-[12px]">
-                        <div className="flex flex-col gap-[4px]">
-                          <p className="font-['Geist:Regular',sans-serif] text-[11px] text-neutral-500">IVA: {calculateIVA(item).toFixed(2)}€</p>
-                          <p className="font-['Geist:Regular',sans-serif] text-[12px] text-neutral-950">Total: {calculateItemTotal(item).toFixed(2)}€</p>
-                        </div>
+                      {/* Item totals */}
+                      <div className="flex flex-col gap-[6px] items-end">
+                        <p className="font-['Geist:Regular',sans-serif] leading-[11px] text-[11px] text-neutral-500">Iva: {calculateIVA(item).toFixed(2)}€</p>
+                        <p className="font-['Geist:Regular',sans-serif] leading-[16px] text-[14px] text-neutral-950">Total: {calculateItemTotal(item).toFixed(2)}€</p>
                       </div>
                     </div>
                   </div>
                 ))}
 
                 {/* Totals Display */}
-                <div className="flex flex-col gap-[12px] items-end w-full mt-[20px] p-[16px] bg-neutral-50 rounded-[8px] border border-neutral-200">
-                  <div className="flex justify-between w-[250px]">
-                    <p className="font-['Geist:Regular',sans-serif] text-[14px] text-neutral-950">Base Imponible</p>
-                    <p className="font-['Geist:Regular',sans-serif] text-[14px] text-neutral-950">{calculateBaseImponible().toFixed(2)}€</p>
+                <div className="flex flex-col gap-[24px] items-start w-[175px] self-end">
+                  <div className="flex items-center justify-between w-full">
+                    <p className="font-['Geist:Regular',sans-serif] leading-[16px] text-[14px] text-neutral-950">Base Imponible</p>
+                    <p className="font-['Geist:Regular',sans-serif] leading-[16px] text-[11px] text-neutral-950">{calculateBaseImponible().toFixed(2)}€</p>
                   </div>
-                  <div className="flex justify-between w-[250px]">
-                    <p className="font-['Geist:Regular',sans-serif] text-[14px] text-neutral-950">IVA Total</p>
-                    <p className="font-['Geist:Regular',sans-serif] text-[14px] text-neutral-950">{calculateTotalIVA().toFixed(2)}€</p>
+                  <div className="flex items-center justify-between w-full">
+                    <p className="font-['Geist:Regular',sans-serif] leading-[16px] text-[14px] text-neutral-950 text-right w-[99px]">Iva 21%</p>
+                    <p className="font-['Geist:Regular',sans-serif] leading-[16px] text-[11px] text-neutral-950">{calculateTotalIVA().toFixed(2)}€</p>
                   </div>
-                  <div className="flex justify-between w-[250px] pt-[8px] border-t border-neutral-200">
-                    <p className="font-['Geist:Medium',sans-serif] text-[16px] text-neutral-950">Total</p>
-                    <p className="font-['Geist:Medium',sans-serif] text-[16px] text-neutral-950">{calculateTotal().toFixed(2)}€</p>
+                  <div className="flex items-center justify-between w-full">
+                    <p className="font-['Geist:Regular',sans-serif] leading-[16px] text-[14px] text-neutral-950 text-right w-[99px]">Total</p>
+                    <p className="font-['Geist:Regular',sans-serif] leading-[16px] text-[11px] text-neutral-950">{calculateTotal().toFixed(2)}€</p>
                   </div>
                 </div>
               </div>
@@ -1275,7 +1388,10 @@ export default function App() {
       </div>
 
       {/* Right Panel - Chat */}
-      <div className="box-border content-stretch flex flex-col h-full items-center p-[20px] relative shrink-0 w-[480px]">
+      <div 
+        className="box-border content-stretch flex flex-col h-full items-center p-[20px] relative shrink-0 transition-all duration-300"
+        style={{ width: `${chatWidth}px` }}
+      >
         {/* Agent/Forms Toggle */}
         <div className="content-stretch flex items-center justify-between relative shrink-0 w-full">
           <div className="bg-neutral-200 box-border content-stretch flex gap-[2px] h-[28px] items-center p-[2px] relative rounded-[4px] shrink-0">
@@ -1320,7 +1436,7 @@ export default function App() {
         {/* Chat Messages Area or Template Suggestions */}
         <div 
           ref={chatContainerRef}
-          className="basis-0 content-stretch flex flex-col gap-[30px] grow items-center min-h-px min-w-px relative shrink-0 w-full overflow-y-auto py-[20px]"
+          className="basis-0 content-stretch flex flex-col gap-[30px] grow items-center min-h-px min-w-px relative shrink-0 w-full overflow-y-auto py-[20px] pdf-scrollbar"
         >
           {!hasMessages ? (
             /* Show Template Suggestions */
@@ -1451,7 +1567,7 @@ export default function App() {
                         </div>
                       </button>
                       <div className="content-stretch flex items-start relative shrink-0" data-name="PromptInputButton">
-                        <button className="bg-white min-w-[32px] relative rounded-[8px] shrink-0 size-[32px] hover:bg-neutral-100 transition-colors" data-name="Button">
+                        <div className="bg-white min-w-[32px] relative rounded-[8px] shrink-0 size-[32px] hover:bg-neutral-100 transition-colors" data-name="Button">
                           <div className="box-border content-stretch flex gap-[6px] items-center justify-center min-w-inherit overflow-clip px-[10px] py-[8px] relative rounded-[inherit] size-[32px]">
                             <div className="content-stretch flex gap-[8px] items-center relative shrink-0" data-name="icon">
                               <div className="overflow-clip relative shrink-0 size-[16px]" data-name="icon">
@@ -1466,7 +1582,7 @@ export default function App() {
                             </div>
                           </div>
                           <div aria-hidden="true" className="absolute border border-neutral-200 border-solid inset-0 pointer-events-none rounded-[8px] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" />
-                        </button>
+                        </div>
                       </div>
                     </div>
                   </div>
