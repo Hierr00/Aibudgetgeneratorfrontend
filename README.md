@@ -1,7 +1,7 @@
 
-  # AI Budget Generator Frontend
+  # Arkcutt 2.1
 
-  This is a code bundle for AI Budget Generator Frontend. The original project is available at https://www.figma.com/design/x1IizsjvlD2196Gs0zb9VB/AI-Budget-Generator-Frontend.
+  This is a code bundle for Arkcutt 2.1. The original project is available at https://www.figma.com/design/x1IizsjvlD2196Gs0zb9VB/Arkcutt-2.1.
 
   ## Running the code
 
