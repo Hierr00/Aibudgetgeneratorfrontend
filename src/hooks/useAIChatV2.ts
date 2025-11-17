@@ -1,19 +1,34 @@
-typescript
 import { useChat } from 'ai/react';
 import { useState, useEffect } from 'react';
+import { useAIMemory } from './useAIMemory';
 
 interface BudgetData {
-  // ... (copiar la interfaz completa del archivo actual)
+  id: string;
+  budgetNumber: string;
+  clientName: string;
+  clientLocation: string;
+  date: string;
+  dueDate: string;
+  items: any[];
 }
 
 interface UseAIChatOptions {
   budgetData: BudgetData[];
   selectedBudget: number;
   onBudgetUpdate?: (updates: any) => void;
+  userId?: string;
 }
 
-export function useAIChatV2({ budgetData, selectedBudget, onBudgetUpdate }: UseAIChatOptions) {
+export function useAIChatV2({
+  budgetData,
+  selectedBudget,
+  onBudgetUpdate,
+  userId = 'demo-user'
+}: UseAIChatOptions) {
   const [apiKey, setApiKey] = useState<string>('');
+
+  // Inicializar sistema de memoria
+  const memory = useAIMemory({ userId, budgets: budgetData });
 
   // Load API key from localStorage
   useEffect(() => {
@@ -26,6 +41,10 @@ export function useAIChatV2({ budgetData, selectedBudget, onBudgetUpdate }: UseA
     body: {
       budgetData: budgetData[selectedBudget],
       apiKey: apiKey,
+      memoryContext: memory.getContextForAI(), // Añadir contexto de memoria
+    },
+    onError(error) {
+      console.error('❌ Chat error:', error);
     },
     onFinish(message) {
       console.log('✅ Message finished', message);
@@ -40,23 +59,34 @@ export function useAIChatV2({ budgetData, selectedBudget, onBudgetUpdate }: UseA
             if (onBudgetUpdate && invocation.result.budgetUpdate) {
               onBudgetUpdate(invocation.result.budgetUpdate);
             }
+
+            // Registrar cuando se crea un presupuesto
+            if (invocation.toolName === 'createCompleteBudget' || invocation.toolName === 'addBudgetItem') {
+              memory.recordBudgetCreated();
+            }
           }
         });
       }
     },
-    onError(error) {
-      console.error('❌ Chat error:', error);
-    },
   });
+
+  // Registrar mensaje del usuario cuando cambia el input
+  const handleSubmitWithMemory = (e: React.FormEvent<HTMLFormElement>) => {
+    if (input.trim()) {
+      memory.recordUserMessage(input);
+    }
+    handleSubmit(e);
+  };
 
   return {
     messages,
     input,
     handleInputChange,
-    handleSubmit,
+    handleSubmit: handleSubmitWithMemory,
     isLoading,
     error,
     apiKey,
     setApiKey,
+    memory, // Exportar memoria para uso externo si es necesario
   };
 }

@@ -10,6 +10,8 @@ import {
 import { useAIChat } from "./hooks/useAIChat";
 import { APIKeySettings } from "./components/settings/APIKeySettings";
 import { BudgetSummaryCard } from "./components/chat/BudgetSummaryCard";
+import { BudgetInsightsPanel } from "./components/chat/BudgetInsightsPanel";
+import { SmartSuggestions } from "./components/chat/SmartSuggestions";
 import { QuickActions } from "./components/chat/QuickActions";
 import { LoadingIndicator } from "./components/chat/LoadingIndicator";
 import { HoldedButton } from "./components/HoldedButton";
@@ -2559,6 +2561,38 @@ export default function App() {
           ) : (
             /* Show Chat Messages */
             <>
+              {/* Resumen del Presupuesto con Márgenes */}
+              {currentBudgetData?.items && currentBudgetData.items.length > 0 && (
+                <div className="mb-4">
+                  <BudgetSummaryCard
+                    items={currentBudgetData.items}
+                    clientName={currentBudgetData.clientName}
+                    clientLocation={currentBudgetData.clientLocation}
+                    showMargins={true}
+                  />
+                </div>
+              )}
+
+              {/* Panel de Insights y Analytics */}
+              {currentBudgetData?.items && currentBudgetData.items.length > 0 && (
+                <div className="mb-4">
+                  <BudgetInsightsPanel
+                    currentBudget={currentBudgetData}
+                    historicalBudgets={budgets || []}
+                  />
+                </div>
+              )}
+
+              {/* Sugerencias Inteligentes */}
+              {input && input.length > 3 && (
+                <div className="mb-4">
+                  <SmartSuggestions
+                    budgetData={currentBudgetData || { items: [] }}
+                    input={input}
+                  />
+                </div>
+              )}
+
               {messages.map((msg) =>
                 msg.role === "user" ? (
                   <UserMessage key={msg.id} message={msg} />
