@@ -27,13 +27,23 @@ Como Cursor para presupuestos: anticipas necesidades, haces las preguntas correc
   • Metacrilato: 3mm(25€) | 5mm(40€) | 8mm(30€)
   • Cartón Gris: 2mm(5€) | 3mm(7€)
 
-# COMPORTAMIENTO PROACTIVO
+# COMPORTAMIENTO PROACTIVO Y ANÁLISIS AUTOMÁTICO
 
-🔍 **SIEMPRE ANALIZA** (en cada interacción):
+🔍 **SIEMPRE ANALIZA AUTOMÁTICAMENTE** (en cada interacción):
+1. **Usa analyzeBudgetHealth** cuando haya items en el presupuesto
+2. **Usa calculateMargin** para CADA línea nueva que agregues
+3. **Usa suggestPriceOptimization** si detectas margen < 25%
+4. **Usa compareWithSimilarBudgets** después de crear presupuesto completo
+5. **Usa predictBudgetConversion** para estimar probabilidad de cierre
+
+❗ **NO PREGUNTES** si debes analizar - HAZLO AUTOMÁTICAMENTE
+
+🎯 **VALIDACIONES CRÍTICAS** (en cada interacción):
 1. ¿Qué datos CRÍTICOS faltan?
-2. ¿El margen es rentable? (mín 30% recomendado)
-3. ¿Hay errores de pricing obvios?
+2. ¿El margen es rentable? (mín 30% recomendado) → Si no, usa suggestPriceOptimization
+3. ¿Hay errores de pricing obvios? → Analiza con analyzeBudgetHealth
 4. ¿El cliente entiende todos los costes?
+5. ¿El ticket es suficiente? (mín 50€)
 
 ❓ **PREGUNTA ESTRATÉGICAMENTE**:
 - "¿Cuántas unidades necesitas?" → Afecta descuentos
@@ -102,7 +112,7 @@ Mientras me cuentas, te anticipo: corte láser a 0,80€/min, diseño 25€ si h
 export async function POST(req: Request) {
   const { messages, data } = await req.json();
 
-  // Get current budget data from the request
+  // Get current budget data and memory context from the request
   const currentBudget = data?.budgetData || {
     budgetNumber: "001",
     clientName: "Clientes varios",
@@ -111,6 +121,24 @@ export async function POST(req: Request) {
     dueDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toLocaleDateString('es-ES'),
     items: [],
   };
+
+  // Obtener contexto de memoria del usuario (si está disponible)
+  const memoryContext = data?.memoryContext || '';
+
+  // Calcular margen actual de cada item si hay datos
+  let itemsWithMargins = '';
+  if (currentBudget.items && currentBudget.items.length > 0) {
+    itemsWithMargins = currentBudget.items.map((item: any, i: number) => {
+      const subtotal = item.price * item.quantity;
+
+      // Estimar coste (esto se puede mejorar con datos reales)
+      // Por ahora, asumimos un margen del 35% para mostrar el concepto
+      const estimatedCost = subtotal * 0.65;
+      const estimatedMargin = ((subtotal - estimatedCost) / subtotal * 100).toFixed(1);
+
+      return `${i + 1}. ${item.concept}: ${item.quantity} × ${item.price}€ = ${subtotal.toFixed(2)}€ (IVA: ${item.ivaRate}%, Margen estimado: ${estimatedMargin}%)`;
+    }).join('\n');
+  }
 
   const result = await streamText({
     model: openai('gpt-4-turbo'),
@@ -125,14 +153,12 @@ Fecha: ${currentBudget.date}
 Vencimiento: ${currentBudget.dueDate}
 Items actuales: ${currentBudget.items.length}
 
-${currentBudget.items.length > 0 ? `
-Conceptos:
-${currentBudget.items.map((item: any, i: number) => {
-  const subtotal = item.price * item.quantity;
-  return `${i + 1}. ${item.concept}: ${item.quantity} × ${item.price}€ = ${subtotal.toFixed(2)}€ (IVA: ${item.ivaRate}%)`;
-}).join('\n')}
+${currentBudget.items && currentBudget.items.length > 0 ? `
+Conceptos (con márgenes):
+${itemsWithMargins}
 ` : 'Sin items todavía - perfecto momento para crear uno completo.'}
-`,
+
+${memoryContext}`,
     tools: {
       updateBudgetInfo: tool({
         description: 'Actualiza información general del presupuesto (cliente, ubicación, fechas)',
@@ -431,6 +457,219 @@ ${currentBudget.items.map((item: any, i: number) => {
               total: total.toFixed(2),
               itemCount: currentBudget.items.length,
             },
+          };
+        },
+      }),
+
+      analyzeBudgetHealth: tool({
+        description: 'Analiza la salud financiera del presupuesto completo y proporciona insights accionables',
+        parameters: z.object({
+          includeRecommendations: z.boolean().default(true).describe('Incluir recomendaciones de mejora'),
+        }),
+        execute: async ({ includeRecommendations }) => {
+          if (currentBudget.items.length === 0) {
+            return {
+              success: false,
+              message: 'No hay items para analizar',
+            };
+          }
+
+          let totalSell = 0;
+          let totalCost = 0;
+          let lowMarginItems = 0;
+          let itemsWithoutDesign = 0;
+
+          currentBudget.items.forEach((item: any) => {
+            const sell = item.price * item.quantity;
+            const cost = sell * 0.65; // Estimación 35% margen
+            totalSell += sell;
+            totalCost += cost;
+
+            const itemMargin = ((sell - cost) / sell) * 100;
+            if (itemMargin < 25) lowMarginItems++;
+
+            if (item.concept.toLowerCase().includes('corte') &&
+                !item.concept.toLowerCase().includes('diseño')) {
+              itemsWithoutDesign++;
+            }
+          });
+
+          const profit = totalSell - totalCost;
+          const margin = (profit / totalSell) * 100;
+
+          const issues: string[] = [];
+          const recommendations: string[] = [];
+
+          // Análisis de margen
+          if (margin < 20) {
+            issues.push('⚠️ Margen global muy bajo (<20%)');
+            recommendations.push('Aumenta precios un 15-20% o reduce costes');
+          } else if (margin < 30) {
+            issues.push('💡 Margen justo (20-30%)');
+            recommendations.push('Considera aumentar margen objetivo al 35-40%');
+          }
+
+          // Análisis de ticket mínimo
+          if (totalSell < 50) {
+            issues.push('⚠️ Ticket por debajo del mínimo (50€)');
+            recommendations.push('Añade servicios complementarios o establece pedido mínimo');
+          }
+
+          // Análisis de items con bajo margen
+          if (lowMarginItems > 0) {
+            issues.push(`💡 ${lowMarginItems} items con margen bajo (<25%)`);
+            recommendations.push('Revisa pricing de items individuales');
+          }
+
+          // Oportunidades de upsell
+          if (itemsWithoutDesign > 0) {
+            recommendations.push('Pregunta si necesitan diseño CAD (+25€)');
+          }
+
+          const hasMaterial = currentBudget.items.some((item: any) =>
+            ['dm', 'metacrilato', 'contrachapado', 'material'].some(mat =>
+              item.concept.toLowerCase().includes(mat)
+            )
+          );
+
+          if (!hasMaterial) {
+            recommendations.push('¿El cliente necesita suministro de material?');
+          }
+
+          return {
+            success: true,
+            analysis: {
+              totalSell: totalSell.toFixed(2),
+              totalCost: totalCost.toFixed(2),
+              profit: profit.toFixed(2),
+              margin: margin.toFixed(1),
+              health: margin >= 30 ? 'Saludable' : margin >= 20 ? 'Aceptable' : 'Crítico',
+            },
+            issues,
+            recommendations: includeRecommendations ? recommendations : [],
+            message: `📊 Análisis: Margen ${margin.toFixed(1)}% | ${issues.length} puntos de atención | ${recommendations.length} mejoras sugeridas`,
+          };
+        },
+      }),
+
+      suggestPriceOptimization: tool({
+        description: 'Sugiere optimizaciones de precio para alcanzar un margen objetivo específico',
+        parameters: z.object({
+          targetMargin: z.number().describe('Margen objetivo deseado (%)'),
+          currentPrice: z.number().describe('Precio actual total'),
+          currentCost: z.number().describe('Coste actual total'),
+        }),
+        execute: async ({ targetMargin, currentPrice, currentCost }) => {
+          // Calcular precio necesario para alcanzar el margen objetivo
+          // Fórmula: PrecioObjetivo = Coste / (1 - MargenObjetivo/100)
+          const targetPrice = currentCost / (1 - targetMargin / 100);
+          const priceIncrease = targetPrice - currentPrice;
+          const percentageIncrease = (priceIncrease / currentPrice) * 100;
+
+          const currentMargin = ((currentPrice - currentCost) / currentPrice) * 100;
+
+          return {
+            success: true,
+            current: {
+              price: currentPrice.toFixed(2),
+              cost: currentCost.toFixed(2),
+              margin: currentMargin.toFixed(1),
+            },
+            target: {
+              price: targetPrice.toFixed(2),
+              margin: targetMargin.toFixed(1),
+              increase: priceIncrease.toFixed(2),
+              percentageIncrease: percentageIncrease.toFixed(1),
+            },
+            message: `💡 Para alcanzar margen del ${targetMargin}%, aumenta el precio de ${currentPrice.toFixed(2)}€ a ${targetPrice.toFixed(2)}€ (+${percentageIncrease.toFixed(1)}%)`,
+          };
+        },
+      }),
+
+      predictBudgetConversion: tool({
+        description: 'Predice la probabilidad de conversión basándose en características del presupuesto',
+        parameters: z.object({
+          budgetAmount: z.number().describe('Monto total del presupuesto'),
+          clientType: z.enum(['new', 'returning', 'unknown']).describe('Tipo de cliente'),
+          responseTime: z.enum(['fast', 'normal', 'slow']).describe('Rapidez de respuesta'),
+        }),
+        execute: async ({ budgetAmount, clientType, responseTime }) => {
+          // Algoritmo simple de predicción basado en reglas
+          let baseConversion = 40; // Base 40%
+
+          // Ajuste por monto
+          if (budgetAmount < 100) baseConversion += 15; // Tickets pequeños convierten más
+          else if (budgetAmount > 500) baseConversion -= 10; // Tickets grandes menos
+
+          // Ajuste por tipo de cliente
+          if (clientType === 'returning') baseConversion += 20;
+          else if (clientType === 'new') baseConversion -= 5;
+
+          // Ajuste por tiempo de respuesta
+          if (responseTime === 'fast') baseConversion += 15;
+          else if (responseTime === 'slow') baseConversion -= 20;
+
+          // Limitar entre 10-90%
+          const conversionRate = Math.max(10, Math.min(90, baseConversion));
+
+          const recommendations: string[] = [];
+
+          if (conversionRate < 40) {
+            recommendations.push('⚠️ Probabilidad baja - Considera añadir urgencia o descuento limitado');
+          }
+          if (responseTime === 'slow') {
+            recommendations.push('⏰ Responde rápido para aumentar conversión (+15%)');
+          }
+          if (clientType === 'returning') {
+            recommendations.push('✅ Cliente recurrente - Alta probabilidad de cierre');
+          }
+
+          return {
+            success: true,
+            conversionRate: conversionRate.toFixed(0),
+            confidence: 'medium',
+            recommendations,
+            message: `🎯 Probabilidad de conversión estimada: ${conversionRate.toFixed(0)}%`,
+          };
+        },
+      }),
+
+      compareWithSimilarBudgets: tool({
+        description: 'Compara el presupuesto actual con presupuestos similares históricos',
+        parameters: z.object({
+          currentAmount: z.number().describe('Monto del presupuesto actual'),
+        }),
+        execute: async ({ currentAmount }) => {
+          // Simulación de datos históricos (en producción vendría de Supabase/Holded)
+          const historicalAverage = 250; // Promedio histórico simulado
+          const historicalRange = { min: 80, max: 600 };
+
+          const vsAverage = ((currentAmount - historicalAverage) / historicalAverage) * 100;
+
+          let positioning = '';
+          if (currentAmount < historicalRange.min) positioning = 'por debajo del rango típico';
+          else if (currentAmount > historicalRange.max) positioning = 'por encima del rango típico';
+          else if (vsAverage > 20) positioning = 'significativamente mayor que el promedio';
+          else if (vsAverage < -20) positioning = 'significativamente menor que el promedio';
+          else positioning = 'dentro del rango esperado';
+
+          return {
+            success: true,
+            comparison: {
+              current: currentAmount.toFixed(2),
+              average: historicalAverage.toFixed(2),
+              difference: vsAverage.toFixed(1),
+              positioning,
+            },
+            insights: [
+              vsAverage > 20
+                ? '💡 Oportunidad grande - Asegura que el cliente vea el valor'
+                : '✅ Ticket en rango normal',
+              currentAmount < historicalRange.min
+                ? '⚠️ Ticket bajo - Considera servicios adicionales'
+                : '',
+            ].filter(Boolean),
+            message: `📊 Este presupuesto está ${positioning} (${vsAverage > 0 ? '+' : ''}${vsAverage.toFixed(1)}% vs promedio)`,
           };
         },
       }),
