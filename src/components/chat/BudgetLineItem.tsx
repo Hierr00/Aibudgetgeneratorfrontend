@@ -137,9 +137,11 @@ export function BudgetLineItem({
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Badge variant="outline" className="text-[9px] px-1 py-0 h-4">
-                        est.
-                      </Badge>
+                      <span className="inline-flex">
+                        <Badge variant="outline" className="text-[9px] px-1 py-0 h-4">
+                          est.
+                        </Badge>
+                      </span>
                     </TooltipTrigger>
                     <TooltipContent>
                       <p className="text-xs">Margen estimado (35% por defecto)</p>

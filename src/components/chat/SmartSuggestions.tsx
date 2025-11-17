@@ -91,7 +91,7 @@ export function SmartSuggestions({
 
     // ===== ANÁLISIS DEL PRESUPUESTO ACTUAL =====
 
-    if (budgetData.items.length > 0) {
+    if (budgetData && budgetData.items && Array.isArray(budgetData.items) && budgetData.items.length > 0) {
       // Calcular total
       const total = budgetData.items.reduce(
         (sum, item) => sum + item.price * item.quantity,

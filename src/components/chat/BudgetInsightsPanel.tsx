@@ -53,7 +53,16 @@ export function BudgetInsightsPanel({
     let totalSell = 0;
     let totalCost = 0;
 
+    // Validar que currentBudget.items existe y es un array
+    if (!currentBudget || !currentBudget.items || !Array.isArray(currentBudget.items)) {
+      return { totalSell: 0, totalCost: 0, profit: 0, margin: 0 };
+    }
+
     currentBudget.items.forEach((item) => {
+      if (!item || typeof item.price !== 'number' || typeof item.quantity !== 'number') {
+        return; // Skip este item
+      }
+
       const sell = item.price * item.quantity;
       const cost = item.costPrice ? item.costPrice * item.quantity : sell * 0.65;
       totalSell += sell;
@@ -67,7 +76,7 @@ export function BudgetInsightsPanel({
   };
 
   const calculateHistoricalAverage = () => {
-    if (historicalBudgets.length === 0) {
+    if (!historicalBudgets || historicalBudgets.length === 0) {
       return { avgTicket: 0, avgMargin: 35, count: 0 };
     }
 
@@ -75,9 +84,16 @@ export function BudgetInsightsPanel({
     let count = 0;
 
     historicalBudgets.forEach((budget) => {
+      // Validar que budget y budget.items existen
+      if (!budget || !budget.items || !Array.isArray(budget.items)) {
+        return; // Skip este budget
+      }
+
       let budgetTotal = 0;
       budget.items.forEach((item) => {
-        budgetTotal += item.price * item.quantity;
+        if (item && typeof item.price === 'number' && typeof item.quantity === 'number') {
+          budgetTotal += item.price * item.quantity;
+        }
       });
       totalTicket += budgetTotal;
       count++;
